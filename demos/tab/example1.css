@@ -1,0 +1,63 @@
+/* simple tab */
+.Tab-simple
+{
+	position:absolute;
+}
+.Tab-simple .tabPage
+{
+   display			: none;
+}
+.Tab-simple .tabBox
+{
+   overflow			: hidden;
+}
+.Tab-simple .filler
+{
+   padding-left		: 2px;
+}
+
+.Tab-simple a.tabsName,
+.Tab-simple a.tabsNameSelected
+{
+   font-family		: arial, sans serif, times new roman;
+   font-size		: 13px;
+   white-space		: nowrap;
+   text-decoration  : none;
+   color            : black;
+}
+
+.Tab-simple td.tabsGfx,
+.Tab-simple td.tabsGfxSelected
+{ 
+   padding-left      : 0px;
+   padding-right     : 3px;
+   padding-bottom    : 4px;
+   padding-left      : 0px;
+}
+
+.Tab-simple td.tabsName
+{
+   padding-left		: 4px;
+   padding-right	: 4px;
+   padding-bottom	: 2px;
+   padding-top		: 1px;
+}
+
+.Tab-simple td.tabsNameSelected
+{
+   padding-left		: 6px;
+   padding-right	: 6px;
+   padding-bottom	: 5px;
+   padding-top		: 1px;
+}
+
+.Tab-simple a.tabsNameInactive
+{
+   font             : italic 3cm arial;
+   font-size        : 13px;
+   color            : #cccccc;
+   text-decoration  : none;
+   text-shadow      : black 0 0 4px;
+   white-space      : nowrap;
+}
+

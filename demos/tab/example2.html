@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <link   type='text/css'        rel='stylesheet' href='example2.css'></link>
+   <script type='text/javascript' src='/jsappwidgets/prototype.js'></script>
+   <script type='text/javascript' src='/jsappwidgets/tab/tab.js'></script>
+   <script type='text/javascript' src='/jsappwidgets/dhtml.js'></script>
+   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>jsAppWidgets  Simple Tab 2 Example</title>
+</head>
+<body style='background-color:#f0f0f0'>
+
+<h3>simple tab with</h3>
+<ul>
+ <li>inactive tab</li>
+ <li>bold active tab with other font</li>
+ <li>other color</li>
+</ul>
+
+<div id="myTab" class="tabContent" >
+ <div id="myTab-page1" class="tabPage" name="Page 1" >         <h1>Page 1</h1>      </div>
+ <div id="myTab-page2" class="tabPage" name="Page 2" inactive ><h1>..Page 2</h1>    </div>
+ <div id="myTab-page3" class="tabPage" name="Page 3" >         <h1>...Page 3</h1>   </div>
+ <div id="myTab-page4" class="tabPage" name="Page 4" >         <h1>....Page 4</h1>  </div>
+</div>
+
+<script>
+  // generate tab
+  //                   style(css)  x    y  width  height    bg-color  structure
+//  var myTab = new Tab( "simple2", 20, 150,   350,    150, "#907040", getElemId( "myTab" ),TAB_FOLDERFULLSIZE   ) ;
+
+  var myTab = new Tab( $$("body")[0], 					// Target
+                       "myTab",						// Source
+                       { cssStyle         : 'simple2',	// Style
+                         left             : "20px",
+                         top              : "150px",
+						 width            : "350px",
+						 height           : "150px",
+						 backgroundColor  : '#907040',
+						 registerAlign    : "center",  // (left), right, center
+						 register         : "top",   // (top), bottom
+						 registerRows     : '2', // (1), 2, 3, ... max 100 :) use backgroundColor! for nice appearance
+					     registerDistance : '5' // (2), ...increase if to less !
+		               }
+		               
+      				 );
+  // show the tab in the container div
+  //                                                       active tab
+//  getElemTagName( "body", 0 ).appendChild( myTab.generateTab( 3 ) );
+</script>
+
+</body>
+</html>

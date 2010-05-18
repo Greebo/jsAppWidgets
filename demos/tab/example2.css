@@ -1,0 +1,63 @@
+/* 2nd simple tab */
+.Tab-simple2
+{
+   position			: absolute;
+}
+.Tab-simple2 .tabPage
+{
+   display			: none;
+}
+.Tab-simple2 .tabBox
+{
+   position			: relative;
+   overflow			: hidden;
+}
+.Tab-simple2 .folder
+{
+   position			: relative;
+}
+.Tab-simple2 .filler
+{
+   border-bottom 	: 1px solid white;
+}
+
+.Tab-simple2 a.tabsName
+{
+   font-family		: times new roman;
+   font-size		: 13px;
+   text-decoration  : none;
+   color			: black;
+   white-space		: nowrap;
+}
+.Tab-simple2 a.tabsNameSelected
+{
+   font-family		: arial;
+   font-size        : 16px;
+   text-decoration  : none;
+   color			: white;
+   font-weight		: bolder;
+   white-space		: nowrap;
+}
+.Tab-simple2 td.tabsName
+{
+   padding-left		: 4px;
+   padding-right	: 4px;
+   padding-bottom	: 2px;
+   padding-top		: 1px;
+}
+.Tab-simple2 td.tabsNameSelected
+{
+   padding-left		: 6px;
+   padding-right	: 6px;
+   padding-bottom	: 4px;
+   padding-top		: 1px;
+}
+.Tab-simple2 a.tabsNameInactive
+{
+   font             : italic 3cm sans serif;
+   font-size        : 13px;
+   color            : #705020;
+   text-decoration  : none;
+   text-shadow      : white 1px 1px 1px;
+   white-space      : nowrap;
+}

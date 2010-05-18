@@ -1,0 +1,79 @@
+.Tab-w2k
+{
+   position:	   absolute;
+   left:		   0px;
+   top:		       0px;
+}
+.Tab-w2k .tabBox
+{
+   position :      relative;
+   border-right:   1px solid gray;
+   border-bottom:  1px solid gray;
+   border-left:    1px solid white;
+   overflow:       hidden;
+}
+.Tab-w2k .folder
+{
+   position:		relative;
+}
+.Tab-w2k .filler
+{
+   border-bottom :  1px solid white;
+}
+.Tab-w2k td.tabs,
+.Tab-w2k td.tabsName
+{
+
+}
+.Tab-w2k td.tabsName
+{
+   padding-left:	4px;
+   padding-right:	4px;
+   padding-bottom:	2px;
+   padding-top:		1px;
+}
+.Tab-w2k a.tabsName,
+.Tab-w2k a.tabsNameSelected
+{
+   font-family:     ms sans serif, tahoma;
+   font-size:       13px;
+   text-decoration: none;
+   color:           black;
+   white-space:     nowrap;
+}
+.Tab-w2k a.tabsNameSelected
+{
+   font-weight: 	bold;
+   font-size:       13px;
+}
+.Tab-w2k td.tabsNameSelected
+{
+   padding-left:    5px;
+   padding-right:   5px;
+   padding-bottom:  4px;
+   padding-top:     1px;
+}
+.Tab-w2k td.tabsIconSelected,
+.Tab-w2k td.tabsIcon
+{
+   padding-left:    0px;
+   padding-right:   0px;
+   padding-bottom:  3px;
+   padding-top:     0px;
+}
+.Tab-w2k .tabPage
+{
+	
+   display:none;
+}
+
+.Tab-w2k a.tabsNameInactive
+{
+   font-family      : ms sans serif, tahoma;
+   font             : italic 3cm sans serif;
+   font-size        : 13px;
+   color            : #CCCCCC;
+   text-decoration  : none;
+   text-shadow      : black 0 0 4px;
+   white-space      : nowrap;
+}

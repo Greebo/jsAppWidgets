@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <link   type='text/css'        rel='stylesheet' href='example1.css'></link>
+   <script type='text/javascript' src='/jsappwidgets/prototype.js'></script>
+   <script type='text/javascript' src='/jsappwidgets/tab/tab.js'></script>
+   <script type='text/javascript' src='/jsappwidgets/dhtml.js'></script>
+   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>jsAppWidgets  Simple Tab Example</title>
+</head>
+<body style='background-color:#d4d0c8'>
+
+<h3>simple tab</h3>
+
+
+<div id="myTab">
+ <div class="tabPage" name="Page 1" ><p><h1>&nbsp;&nbsp;&nbsp;3D tabs</h1></p></div>
+ <div class="tabPage" name="Page 2" ><p><b>&nbsp;&nbsp;&nbsp;with dynamic sizable tab folders</b></p></div>
+ <div class="tabPage" name="Page 3" ><p><b>&nbsp;&nbsp;&nbsp;highly designable by CSS</b></p></div>
+ <div class="tabPage" name="Page 4" >
+   <p><b>&nbsp;&nbsp;&nbsp;tested with
+                 <ul><li>Mozilla Firefox</li>
+                     <li>Opera</li>
+                     <li>MS IExplorer</li>
+                     <li>Google Chrome</li></ul> 
+   </b></p> 
+ </div>
+</div>
+<script>
+
+
+  // generate tab
+  var myTab = new Tab( $$('body')[0], 					// Target
+                       $("myTab"),						// Source
+                       { cssStyle        : 'simple',	// Style
+    				     left            : "20px",
+    					 top             : "150px",
+    					 width           : "350px",
+    					 height          : "150px"
+    					 
+    		           }
+      				);
+
+</script>
+
+</body>
+</html>
