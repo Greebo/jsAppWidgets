@@ -1,7 +1,7 @@
 /* simple tab */
 .Tab-simple
 {
-	position        : absolute;
+	position        : relative;
 }
 .Tab-simple .tabPage
 {
@@ -70,3 +70,5 @@
    text-shadow      : black 0 0 4px;
    white-space      : nowrap;
 }
+
+

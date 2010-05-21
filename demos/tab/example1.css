@@ -1,19 +1,21 @@
 /* simple tab */
 .Tab-simple
 {
-	position:absolute;
+	position        : absolute;
 }
+
 .Tab-simple .tabPage
 {
    display			: none;
 }
 .Tab-simple .tabBox
 {
-   overflow			: hidden;
+   overflow			: auto;
 }
 .Tab-simple .filler
 {
-   padding-left		: 2px;
+   width            : 1px;
+   padding          : 2px;
 }
 
 .Tab-simple a.tabsName,
@@ -41,6 +43,7 @@
    padding-right	: 4px;
    padding-bottom	: 2px;
    padding-top		: 1px;
+   white-space      : nowrap;
 }
 
 .Tab-simple td.tabsNameSelected
@@ -49,6 +52,7 @@
    padding-right	: 6px;
    padding-bottom	: 5px;
    padding-top		: 1px;
+   white-space      : nowrap;
 }
 
 .Tab-simple a.tabsNameInactive
