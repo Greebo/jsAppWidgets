@@ -1,6 +1,7 @@
 /* TODO
 * shortcuts
-* two and more rows of tabs
+* register left and right
+* different color for each tab
 * 
 */
 // global vars
@@ -23,35 +24,74 @@ Element.addMethods( "tr",{
   }
 } );
 
+Element.addMethods( {
+  replace : function ( p_nElement, p_nNewElement )
+  {
+    // save parent (dont't try p_nElement.up().replacechild(..., p_nElement) !!!!!!
+    v_nParent = p_nElement.up();
+    v_nParent.replaceChild( p_nNewElement, p_nElement );
+  }
+} );
+
 
 // Superclass
 var TabElement = Class.create( {
-  initialize : function( p_nTarget, p_nSource, p_hStyle )
+  initialize : function( p_nSource, p_hStyle, p_oCaller )
   {
-    // Target node
-    this.m_nTarget     = $(p_nTarget);
+    // if parent exist, the parent is the master node
+    try { 
+      this.m_iTabNr     = p_oCaller.m_iTabNr; 
+      this.m_bHasParent = true; 
+        }
+    catch (e){ // otherwise this node is the master node
+      // write object in global var
+      g_aTabWidget[this.m_iTabNr = g_iTabNr++] = this;
+      this.m_bHasParent = false;
+    };
+
+    // stores the number of actual page
+    this.m_iActPage = 1;
+
     // Source html code
     this.m_nSource     = $(p_nSource);
-    // Style Infos
-    this.m_hStyle      = this.convertStyle( $H(p_hStyle) );
+    // id of the Source HTML
+    this.m_sSourceID   = this.m_nSource.id;
     
-    this.m_iTabNr      = g_iTabNr; 
+    // Style Infos
+    this.m_hStyle      = this.initStyle( $H(p_hStyle) );
 
-    // stores the number of actuall page
-    this.m_iActPage = 1;
-    this.element = this.generateNode( );
+    // generate the element, anker  and identify it, if master
+    if (  !this.m_bHasParent )
+    {
+      this.element = this.m_nSource;
+      this.redraw();
+    }
+    else
+      // only create element
+      this.element = this.create( );
   },
-  
-  // no change of Style in Superclass
-  convertStyle : function( p ){ return p; },
-  generateNode : function(){ return 'none'; },
-  set :          function( p_iPage ){ this.m_iActPage = p_iPage; 
-  },
+
+  initStyle :    function( p )      { return p; },  
+  create :       function()         { return 'none'; },
+  set :          function( p_iPage ){ this.m_iActPage = p_iPage; },
   get :          function()         { return this.m_iActPage; },
   redraw :       function()      
   { 
-    v_nOldElement = this.element;
-    this.element.up().replaceChild( this.element = this.generateNode() , v_nOldElement );
+    v_nNewElement = this.create();
+    this.element.replace( v_nNewElement );
+    this.element  = v_nNewElement; 
+
+    if ( !this.m_bHasParent ) // node is master
+    { // new id
+    //  this.m_nSource.replace( this.element );
+      this.m_nSource = this.element;
+
+      this.element.id = this.m_sSourceID;
+      // replace source html node
+      // add class name
+      this.element.addClassName( this.m_hStyle.get('cssStyle') );
+    }
+
   },
   getColor : function( p_iPage )
   {
@@ -63,12 +103,14 @@ var TabElement = Class.create( {
       return v_sColor;
       
     // selected Color
-    if ( this.m_hStyle.get('selectedColor') != "" && p_iPage == this.m_iActPage)
-      v_sColor = this.m_hStyle.get('selectedColor');
+    if ( this.m_hStyle.get( 'selectedColor' ) != "" && p_iPage == this.m_iActPage)
+      v_sColor = this.m_hStyle.get( 'selectedColor' );
 
     return v_sColor;
   }
 } );
+
+
 /**
  * Creates a tab object. The tab will be only initialized and not shown.
  * To draw the tab use the method {@link Tab#generateTab}
@@ -89,23 +131,14 @@ var TabElement = Class.create( {
  */
 var Tab = Class.create( TabElement, {
   
-  initialize : function( $super, p_nTarget, p_nSource, p_hStyle )
+  initialize : function( $super, p_nSource, p_hStyle )
   {
     // params in member
-    $super( p_nTarget, p_nSource, p_hStyle );
-    
-    // write object in global var
-    g_aTabWidget[this.m_iTabNr] = this;
-  
-    // anker the new tab node in target node
-    this.m_nTarget.appendChild( this.element );
-
-    // increase glob var
-    g_iTabNr++;
+    $super( p_nSource, p_hStyle );
   },
 
   // intern : call from Superclass
-  convertStyle : function( $super, p_hStyle )
+  initStyle : function( $super, p_hStyle )
   {
     // defaults
     v_hStyle = $H( { cssStyle         : "",
@@ -120,6 +153,7 @@ var Tab = Class.create( TabElement, {
                      registerRows     : '1',
                      registerDistance : '2'
                  } );
+
     // override default values with parameter hash   
     v_hStyle.update( p_hStyle );
     
@@ -146,26 +180,28 @@ var Tab = Class.create( TabElement, {
    *  
    * @private
    */
-  generateNode : function(  )
+  create : function(  )
   {
-    
     // new Object for Folders
-    this.m_oRegister = new TabRegister( this.m_nTarget, this.m_nSource, this.m_hStyle );
-    
-    this.m_oBox      = new TabBox(      this.m_nTarget, this.m_nSource, this.m_hStyle );
-    // a div over the whole tab
+    this.m_oRegister = new TabRegister( this.m_nSource, this.m_hStyle, this );
+    // new Box
+    this.m_oBox      = new TabBox(      this.m_nSource, this.m_hStyle, this );
 
-    this.m_nTab = new Element( "table", { 'id' : "Tab" + this.m_iTabNr, cellSpacing: 0, cellPadding : 0} );
-    this.m_nTab.addClassName( "Tab-" + this.m_hStyle.get('cssStyle') );
+    // a div over the whole tab
+    this.m_nTab = new Element( "table", {cellSpacing: 0, cellPadding : 0} );
+
+    //this.m_nTab.id = this.m_sSourceID;
+
     
     this.m_nTab.setStyle( { left   : this.m_hStyle.get('left'),
                             top    : this.m_hStyle.get('top')
                           } );
 
-    v_nRegisterTD = new Element("td").setStyle( { height: '100%'} );;
+    v_nRegisterTD = new Element("td");
     v_nRegisterTD.appendChild( this.m_oRegister.element );  
     v_nBoxTD      = new Element( "td" );
     v_nBoxTD.appendChild( this.m_oBox.element );
+
     // first Row
     v_nTR = this.m_nTab.insertRow( 0 );
 
@@ -180,7 +216,6 @@ var Tab = Class.create( TabElement, {
         this.m_nTab.insertRow( -1 ).appendChild( v_nRegisterTD );
         break;
     }
-           
     // return the new node
     return this.m_nTab;
   
@@ -199,52 +234,46 @@ var Tab = Class.create( TabElement, {
    */
   set : function( $super, p_iPageNr )
   {
-    if ( ! this.m_oRegister.pageValid( p_iPageNr ) )
-      return;
-      
-    $super( p_iPageNr );
-    
-    v_nRegister = $(this.m_oRegister.element);
-    
     // set() for the two inner objects
-    this.m_oRegister.set( p_iPageNr );
-    this.m_oBox.set(      p_iPageNr );
-    
+    if ( this.m_oRegister.set( p_iPageNr ) )
+      this.m_oBox.set(      p_iPageNr );
+
+    return $super( p_iPageNr );
+
   }
  
 });
 
 
-
 /**
- * Creates the folders of the tab
+ * Creates the tab registers 
  * 
  * @version 1.0
  * 
- * @param {integer} nr number of the tab widget
- * @param {string}  style CSS design of the tab
- * @param {integer} x x-coordinate of the tab
- * @param {integer} y y-coordinate of the tab
- * @param {integer} width width the tab
- * @param {integer} height height of the tab
- * @param {string}  backColor background color of the tab
- * @param {object}  pages the source html code of the tab
+ * @param {node,string} source Source DIV node (or id) 
+ * @param {hash}        style style elements:
+ * { cssStyle, left, top, backgroundColor, register, registerAlign, registerRows, registerDistance } 
  * 
  * @constructor
  * 
- * @private
+ * @example myTabRegister = new TabRegister( "simple", { left : '10px', top : '10px', 'backgroundColor : 'blue' } );
  */
 var TabRegister = Class.create( TabElement, {
-  initialize : function ( $super, p_nTarget, p_nSource, p_hStyle )
+  initialize : function ( $super, p_nSource, p_hStyle, p_oCaller )
   {
-
+    $super( p_nSource, p_hStyle, p_oCaller );
+  },
+  
+  // subfunction from constructor
+  initStyle : function( $super, p_hStyle )
+  {
     // page vars
     this.m_aRegisterNames     = new Array();
     this.m_aRegisterGfx       = new Array();
     this.m_aRegisterActive    = new Array();
       
     // store all tabnames, gfx and active (allow) status
-    for( i = 0; v_nMyPage = $$( ".tabPage"  )[i ]; i++  )
+    for( i = 0; v_nMyPage = $$( "#"+this.m_nSource.id+" .tabPage"  )[i ]; i++  )
     {
       this.m_aRegisterNames[i+1]  = v_nMyPage.getAttribute( "name" );
       this.m_aRegisterGfx[i+1]    = v_nMyPage.getAttribute( "gfx" );
@@ -257,15 +286,18 @@ var TabRegister = Class.create( TabElement, {
       
     // Define register pages
     //                 bgCol, links    oben/unten  rechts1  rechts2 inner bg
-    this.m_sRegColTbl = new Array( "",    "white",   "white",  "gray", "black", p_hStyle.get('backgroundColor'));
+    this.m_sRegColTbl = new Array( "",    "white",   "white",  "gray", "black", p_hStyle.get('backgroundColor'), p_hStyle.get('backgroundColor'));
     // change color if bottom register
     if( p_hStyle.get('register') == "bottom" )
-      this.m_sRegColTbl[2] = "gray";
+    {
+      this.m_sRegColTbl[2] = "black";
+      this.m_sRegColTbl[6] = "gray";
+    }
 
     // color table for register pages (active & non-active)(top+bottom)
     this.m_aRegPageColTbl    = new Array();
     this.m_aRegPageColTbl[0] = new Array( 0, 0, 2, 2, 0, 0 );
-    this.m_aRegPageColTbl[1] = new Array( 0, 1, 5, 5, 4, 0 );
+    this.m_aRegPageColTbl[1] = new Array( 0, 1, 6, 6, 4, 0 );
     this.m_aRegPageColTbl[2] = new Array( 1, 5, 5, 5, 3, 4 );
     //    These are set at creation time (look further in code...)
     //this.m_aRegPageColTbl[3] = new Array( 2, 2, 2, 2, 2, 2 ); <- non-active
@@ -274,14 +306,13 @@ var TabRegister = Class.create( TabElement, {
     // Position of GFX and NAME in RegPageTbl
     this.m_aGfxPos  = ( { x: 2, y : 2 } );
     this.m_aNamePos = ( { x: 3, y : 2 } );
-
-    $super( p_nTarget, p_nSource, p_hStyle );
-
+    
+    return $super( p_hStyle );
   },
-  
   pageValid : function( p_iPage )
   {
-    return ( this.m_aRegisterActive[ p_iPage ] );
+    // no incactive page and no page that not exist
+    return ( this.m_aRegisterActive[ p_iPage ] && (this.m_iCntRegPages >= p_iPage));
   },
   /**
    * generates the Registers
@@ -291,7 +322,7 @@ var TabRegister = Class.create( TabElement, {
    * @private
    */
    
-   generateNode : function()
+   create : function()
    {
      // align
      var v_sRegisterAlign = this.m_hStyle.get('registerAlign');
@@ -318,7 +349,7 @@ var TabRegister = Class.create( TabElement, {
        if ( !v_bActPageInRegister )
        {
          // make overlapping
-         v_sDistance = (++v_iDistanceIndex * parseInt(this.m_hStyle.get('registerDistance')) + 2) 
+         v_sDistance = (1 * parseInt(this.m_hStyle.get('registerDistance')) ) 
                           * ( this.m_hStyle.get('register')  == 'bottom' ? (-1): 1 );
          
          v_nRegisterRow.setStyle( { top: v_sDistance +'px', position:'relative', zIndex : 100 - v_nRow } );
@@ -417,11 +448,10 @@ var TabRegister = Class.create( TabElement, {
      {
        switch( this.m_hStyle.get('register') )
        {
-         case 'bottom': v_nTD.style.borderTop    = "1px solid gray";  break;
+         case 'bottom': v_nTD.style.borderTop    = "1px solid black";  break;
          case 'top'   : v_nTD.style.borderBottom = "1px solid white"; break;
        }
      }
-       v_nTD.setStyle( { height : "13px"  } );
 
      // for compatibility ie 6
      v_nBox = new Element( "div" ).setStyle( {width : "1px"} );
@@ -457,14 +487,14 @@ var TabRegister = Class.create( TabElement, {
       
     // generate the table element
     var v_nTable = new Element( "table", { cellSpacing: 0, cellPadding : 0 });
-//    v_nTable.setStyle({ width : "100%" });
+    v_nTable.setStyle({ width : "100%" });  // needed for chrome
 
     // start and end point of register page 
     v_iStartColmn = ( p_iPage == this.m_iActPage + 1 && p_bCutBorder ? 2 : 0 );
     v_iEndColmn   = ( p_iPage == this.m_iActPage - 1 && p_bCutBorder ? 3 : 5 );
 
     // 4 rows
-    for( var v_iRow = 0 ; v_iRow < 4; v_iRow++ )
+    for( var v_iRow = 0 ; v_iRow < (p_bCutBorder ? 4 : 3); v_iRow++ )
     {
       // new TR on first child or last
       v_nTR = $(v_nTable.insertRow( (this.m_hStyle.get('register') == 'top') * v_iRow ));
@@ -486,6 +516,7 @@ var TabRegister = Class.create( TabElement, {
           v_nTD.addClassName( "tabsName" + v_sSelected );
           v_nTD.style.width = "100%";
           v_nTD.appendChild( document.createTextNode( this.m_aRegisterNames[p_iPage] ));
+          v_nTable.style.whiteSpace = 'nowrap';
         }
       } //for : all columns
     } // for : all Rows
@@ -497,7 +528,6 @@ var TabRegister = Class.create( TabElement, {
       v_nA.href = "javascript:void(0)";
     else
       v_nA.href = "javascript:setPage( " + this.m_iTabNr + ", " + p_iPage + " );";
-
     // for ie : need to activate the <a> tag!
     v_nTable.observe('click', linkClick );
     v_nA.appendChild( v_nTable );
@@ -512,9 +542,14 @@ var TabRegister = Class.create( TabElement, {
   
   set : function( $super, p_iPageNr )
   {
+
+    if ( !this.pageValid( p_iPageNr ) )
+      return false;
+
     $super( p_iPageNr );
     
     this.redraw();
+    return true;
   }
   
 });
@@ -540,11 +575,11 @@ var TabRegister = Class.create( TabElement, {
  * @private
  */
 var TabBox = Class.create( TabElement, {
-  initialize : function( $super, p_nTarget, p_nSource, p_hStyle )
+  initialize : function( $super, p_nSource, p_hStyle, p_oCaller )
   {
-    $super( p_nTarget, p_nSource, p_hStyle );
+    $super( p_nSource, p_hStyle, p_oCaller );
   },
-  generateNode : function(   )
+  create : function(   )
   {
     // box over the tab
     this.m_nBox = new Element( "div",
@@ -579,8 +614,12 @@ var TabBox = Class.create( TabElement, {
 
     // set the actual page
     this.set(  this.m_iActPage );
-    
-    v_nInnerBox.appendChild( this.m_nSource );
+   
+    // all pages 
+    var v_nAllPageDIV = $$("#"+this.m_nSource.id + " div.tabPage");
+    $A( v_nAllPageDIV ).each( function( n ){ v_nInnerBox.appendChild( $(n) ); } );
+
+    //    v_nInnerBox.appendChild( this.m_nSource );
     this.m_nBox.appendChild( v_nInnerBox);
 
     return this.m_nBox;
@@ -591,8 +630,10 @@ var TabBox = Class.create( TabElement, {
     if ($super != "")
       $super( p_iPageNr );
     
-    $A($$( ".tabPage" )).each( Element.hide );
-    $$( ".tabPage" )[this.m_iActPage -1].setStyle( { display : "block" });
+    var v_nAllPageDIV = $$("#"+this.m_sSourceID + " div.tabPage");
+    $A( v_nAllPageDIV ).each( Element.hide );
+
+    v_nAllPageDIV[this.m_iActPage -1].setStyle( { display : "block" });
     if ( this.element)
       this.element.style.backgroundColor = this.getColor(this.m_iActPage );
   }

@@ -1,23 +1,26 @@
 /* simple tab */
-.Tab-simple
+.simple
 {
-	position:absolute;
+	position        : absolute;
 }
-.Tab-simple .tabPage
+
+.simple .tabPage
 {
    display			: none;
 }
-.Tab-simple .tabBox
+.simple .tabBox
 {
-   overflow			: hidden;
+   overflow			: auto;
+   position         : relative;
 }
-.Tab-simple .filler
+.simple .filler
 {
-   padding-left		: 2px;
+   width            : 1px;
+   padding          : 2px;
 }
 
-.Tab-simple a.tabsName,
-.Tab-simple a.tabsNameSelected
+.simple a.tabsName,
+.simple a.tabsNameSelected
 {
    font-family		: arial, sans serif, times new roman;
    font-size		: 13px;
@@ -26,8 +29,8 @@
    color            : black;
 }
 
-.Tab-simple td.tabsGfx,
-.Tab-simple td.tabsGfxSelected
+.simple td.tabsGfx,
+.simple td.tabsGfxSelected
 { 
    padding-left      : 0px;
    padding-right     : 3px;
@@ -35,23 +38,25 @@
    padding-left      : 0px;
 }
 
-.Tab-simple td.tabsName
+.simple td.tabsName
 {
    padding-left		: 4px;
    padding-right	: 4px;
    padding-bottom	: 2px;
    padding-top		: 1px;
+   white-space      : nowrap;
 }
 
-.Tab-simple td.tabsNameSelected
+.simple td.tabsNameSelected
 {
    padding-left		: 6px;
    padding-right	: 6px;
    padding-bottom	: 5px;
    padding-top		: 1px;
+   white-space      : nowrap;
 }
 
-.Tab-simple a.tabsNameInactive
+.simple a.tabsNameInactive
 {
    font             : italic 3cm arial;
    font-size        : 13px;

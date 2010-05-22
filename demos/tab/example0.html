@@ -9,16 +9,46 @@
 </head>
 <body style='background-color:#d4d0c8' id = 'body'>
 
-<h3>simple tab</h3>
 
 
-<div id="myTab">
+<table border=1 cellpadding=20px cellspacing=3px>
+<tr>
+<td><h3>Class "TabRegister"</h3></td><td><h3>Class "TabBox"</h3></td><td><h3>Class "Tab"</h3></td>
+</tr>
+<tr>
+<td style='width:250px'>
+
+
+<div id="myTabRegister" >
 <!-- <div class="tabPage" name="Page 1" gfx="/jsappwidgets/menu/icon/ordner.gif" ><p><h1>&nbsp;&nbsp;&nbsp;3D tabs</h1></p></div>
   --> 
- <div class="tabPage" name="&nbsp;&nbsp;A" ><p><h1>&nbsp;&nbsp;&nbsp;3D tabs</h1></p></div>
- <div class="tabPage" name="&nbsp;&nbsp;B" inactive ><p><b>&nbsp;&nbsp;&nbsp;with dynamic sizable tab folders</b></p></div>
- <div class="tabPage" name="&nbsp;C/D" ><p><b>&nbsp;&nbsp;&nbsp;highly designable by CSS</b></p></div>
- <div class="tabPage" name="&nbsp;&nbsp;E" >
+<div class="tabPage" name="&nbsp;&nbsp;A" ><p><h1>&nbsp;&nbsp;&nbsp;3D tabs</h1></p></div>
+<div class="tabPage" name="&nbsp;&nbsp;B unused" inactive ><p><b>&nbsp;&nbsp;&nbsp;with dynamic sizable tab folders</b></p></div>
+<div class="tabPage" name="&nbsp;C/D" ><p><b>&nbsp;&nbsp;&nbsp;highly designable by CSS</b></p></div>
+<div class="tabPage" name="&nbsp;&nbsp;E" >
+   <p><b>&nbsp;&nbsp;&nbsp;tested with
+                 <ul><li>Mozilla Firefox</li>
+                     <li>Opera</li>
+                     <li>MS IExplorer</li>
+                     <li>Google Chrome</li></ul> 
+   </b></p> 
+</div>
+</div>
+<!--   
+ 
+
+-->
+</td>
+
+
+<td>
+<div id="myTabBox" >
+<!-- <div class="tabPage" name="Page 1" gfx="/jsappwidgets/menu/icon/ordner.gif" ><p><h1>&nbsp;&nbsp;&nbsp;3D tabs</h1></p></div>
+  --> 
+<div class="tabPage" name="&nbsp;&nbsp;A" ><p><h1>&nbsp;&nbsp;&nbsp;3D tabs</h1></p></div>
+<div class="tabPage" name="&nbsp;&nbsp;B unused" inactive ><p><b>&nbsp;&nbsp;&nbsp;with dynamic sizable tab folders</b></p></div>
+<div class="tabPage" name="&nbsp;C/D" ><p><b>&nbsp;&nbsp;&nbsp;highly designable by CSS</b></p></div>
+<div class="tabPage" name="&nbsp;&nbsp;E" >
    <p><b>&nbsp;&nbsp;&nbsp;tested with
                  <ul><li>Mozilla Firefox</li>
                      <li>Opera</li>
@@ -26,45 +56,193 @@
                      <li>Google Chrome</li></ul> 
    </b></p> 
  </div>
-<div class="tabPage" name="&nbsp;&nbsp;F" ><p><h1>&nbsp;&nbsp;&nbsp;page 5</h1></p></div>
- <div class="tabPage" name="&nbsp;&nbsp;G" ><p><b>&nbsp;&nbsp;&nbsp;page 6</b></p></div>
+ </div>
 
- <div class="tabPage" name="&nbsp;&nbsp;H" ><p><b>&nbsp;&nbsp;&nbsp;page 7</b></p></div>
- <div class="tabPage" name="&nbsp;&nbsp;I" ><p><b>&nbsp;&nbsp;&nbsp;page 8</b></p></div>
- <div class="tabPage" name="&nbsp;&nbsp;J" ><p><b>&nbsp;&nbsp;&nbsp;page 9</b></p></div>
- <div class="tabPage" name="&nbsp;&nbsp;K" ><p><b>&nbsp;&nbsp;&nbsp;page 10</b></p></div>
- 
+</td>
+<td>
+<div id="myTab" >
+<!-- <div class="tabPage" name="Page 1" gfx="/jsappwidgets/menu/icon/ordner.gif" ><p><h1>&nbsp;&nbsp;&nbsp;3D tabs</h1></p></div>
+  --> 
+<div class="tabPage" name="&nbsp;&nbsp;A" ><p><h1>&nbsp;&nbsp;&nbsp;3D tabs</h1></p></div>
+<div class="tabPage" name="&nbsp;&nbsp;B unused" inactive ><p><b>&nbsp;&nbsp;&nbsp;with dynamic sizable tab folders</b></p></div>
+<div class="tabPage" name="&nbsp;C/D" ><p><b>&nbsp;&nbsp;&nbsp;highly designable by CSS</b></p></div>
+<div class="tabPage" name="&nbsp;&nbsp;E" >
+   <p><b>&nbsp;&nbsp;&nbsp;tested with
+                 <ul><li>Mozilla Firefox</li>
+                     <li>Opera</li>
+                     <li>MS IExplorer</li>
+                     <li>Google Chrome</li></ul> 
+   </b></p> 
+ </div>
+ </div>
+</td>
+</tr>
+<tr>
+<td>
+<h2>style attributes</h2>
 
-<!--   
--->
+<table border=1>
+<tr>
+<td><b>cssStyle</b></li></td>
+ <td>CSS class</td>
+</tr>
+<tr>
+<td><b>backgroundColor</b></td>
+<td>background color of the pages</td>
+</tr>
+<tr>
+<td><b>selectedColor</b></td> 
+<td>color of the selected page</td>
+</tr>
+<tr>
+<td><b>registerAlign</b> </td>
+<td>left, right or center align</td> 
+</tr>
+<tr>
+<td><b>register    </b>  </td>
+<td>top or bottom register</td>
+</tr>
+<tr>
+<td><b>registerRows</b>  </td>
+<td>count of register rows</td>
+</tr>
+<tr>
+<td><b>registerDistance</b>   </td>
+<td>distance offset for register rows</td>   
+</tr>
+</table>
 
-</div>
+</td>
+<td>
 
+<h2>style attributes</h2>
 
-<div id="test"></div>
+<table border=1>
+<tr>
+<td><b>cssStyle</b></li></td>
+ <td>CSS class</td>
+</tr>
+<tr>
+<td><b>width</b> </td>
+<td>width of the box</td> 
+</tr>
+<tr>
+<td><b>height    </b>  </td>
+<td>height of the box</td>
+</tr>
+<tr>
+<td><b>backgroundColor</b></td>
+<td>background color of the pages</td>
+</tr>
+<tr>
+<td><b>selectedColor</b></td> 
+<td>color of the selected page</td>
+</tr>
+<tr>
+<td><b>register</b>  </td>
+<td>top or bottom register</td>
+</tr>
+</table>
 
-<div id="targetbox" style="position:absolute;width:700px; height:500px; left:10px; top:150px; border:2px solid black">
+</td>
+<td>
 
-</div>
+<h2>style attributes</h2>
+
+<table border=1>
+<tr>
+<td><b>cssStyle</b></li></td>
+ <td>CSS class</td>
+</tr>
+<tr>
+<td><b>top</b> </td>
+<td>top position</td> 
+</tr>
+<tr>
+<td><b>left    </b>  </td>
+<td>left position</td>
+</tr>
+<tr>
+<td><b>width</b> </td>
+<td>width of the box</td> 
+</tr>
+<tr>
+<td><b>height    </b>  </td>
+<td>height of the box</td>
+</tr>
+<tr>
+<td><b>backgroundColor</b></td>
+<td>background color of the pages</td>
+</tr>
+<tr>
+<td><b>selectedColor</b></td> 
+<td>color of the selected page</td>
+</tr>
+<tr>
+<td><b>register</b>  </td>
+<td>top or bottom register</td>
+</tr>
+<tr>
+<td><b>registerAlign</b> </td>
+<td>left, right or center align</td> 
+</tr>
+<tr>
+<td><b>registerRows</b>  </td>
+<td>count of register rows</td>
+</tr>
+<tr>
+<td><b>registerDistance</b>   </td>
+<td>distance offset for register rows</td>   
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
 
 <script>
 
   // generate tab
-  var myTab = new Tab( "targetbox", 					// Target (id or node)
-                       "myTab",				  		    // Source (id or node)
-                       { cssStyle         : 'simple',	// Style (hash)
-                         left             : '10px',
-                         top              : '10px',
-						 width            : "700px",
-						 height           : "200px", // no %-value!!
-						 backgroundColor  : '#a08080',
-					     selectedColor    : '#d48080',
-						 registerAlign    : "center",  // (left), right, center
-						 register         : "top",   // (top), bottom
-						 registerRows     : '1', // (1), 2, 3, ... max 100 :) use backgroundColor! for nice appearance
-					     registerDistance : '2px' // (2), ...increase if to less !
-		               }
-     				 );
+  /*
+    */
+    var myTabRegister = new TabRegister(   "myTabRegister",				  		// Source HTML (id or node)
+        { cssStyle     : 'simple',	// Style (hash) in css : e.g. 'simple' ->> css-Style-Class is '.Tab-simple'
+		  backgroundColor  : '#a08080',  // (none) background color of the pages
+		  selectedColor    : '#d48080',  // (none) active page color
+		  registerAlign    : "left",   // (left), right, center
+		  register         : "bottom",      // (top), bottom
+		  registerRows     : '1',        // (1), 2, 3, ... max 100 :) use backgroundColor! for nice appearance
+ 		  registerDistance : '4px'       // (2), ...increase if to less !
+		}
+);
+
+var myTabBox = new TabBox( "myTabBox",				  		// Source HTML (id or node)
+    { cssStyle     : 'simple',	// Style (hash) in css : e.g. 'simple' ->> css-Style-Class is '.Tab-simple'
+	  width            : "250px",    // (0px) width (inner tab container)    
+      height           : "200px",    // (0px) height (of the inner tab container, display aera). Do NOT %-value here!!
+	  backgroundColor  : '#a08080',  // (none) background color of the pages
+	  selectedColor    : '#d48080',  // (none) active page color
+	  register         : "top",      // (top), bottom
+    }
+);
+
+var myTab = new Tab(   "myTab",				  		// Source HTML (id or node)
+      { cssStyle         : 'simple',	// Style (hash) in css : e.g. 'simple' ->> css-Style-Class is '.Tab-simple'
+	    left             : '10px',     // (0px) left position
+        top              : '10px',    // (0px) top position
+		width            : "250px",    // (0px) width (inner tab container)    
+		height           : "200px",    // (0px) height (of the inner tab container, display aera). Do NOT %-value here!!
+		backgroundColor  : '#a08080',  // (none) background color of the pages
+		selectedColor    : '#d48080',  // (none) active page color
+		registerAlign    : "left",   // (left), right, center
+		register         : "bottom",      // (top), bottom
+		registerRows     : '1',        // (1), 2, 3, ... max 100 :) use backgroundColor! for nice appearance
+		registerDistance : '4px'       // (2), ...increase if to less !
+	  }
+);
+
+
+
 
 
 </script>

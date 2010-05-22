@@ -22,6 +22,14 @@
  <div id="myTab-page2" class="tabPage" name="Page 2" inactive ><h1>..Page 2</h1>    </div>
  <div id="myTab-page3" class="tabPage" name="Page 3" >         <h1>...Page 3</h1>   </div>
  <div id="myTab-page4" class="tabPage" name="Page 4" >         <h1>....Page 4</h1>  </div>
+ <div id="myTab-page1" class="tabPage" name="Page 1" >         <h1>Page 1</h1>      </div>
+ <div id="myTab-page2" class="tabPage" name="Page 2" inactive ><h1>..Page 2</h1>    </div>
+ <div id="myTab-page3" class="tabPage" name="Page 3" >         <h1>...Page 3</h1>   </div>
+ <div id="myTab-page4" class="tabPage" name="Page 4" >         <h1>....Page 4</h1>  </div>
+ <div id="myTab-page1" class="tabPage" name="Page 1" >         <h1>Page 1</h1>      </div>
+ <div id="myTab-page2" class="tabPage" name="Page 2" inactive ><h1>..Page 2</h1>    </div>
+ <div id="myTab-page3" class="tabPage" name="Page 3" >         <h1>...Page 3</h1>   </div>
+ <div id="myTab-page4" class="tabPage" name="Page 4" >         <h1>....Page 4</h1>  </div>
 </div>
 
 <script>
@@ -29,7 +37,7 @@
   //                   style(css)  x    y  width  height    bg-color  structure
 //  var myTab = new Tab( "simple2", 20, 150,   350,    150, "#907040", getElemId( "myTab" ),TAB_FOLDERFULLSIZE   ) ;
 
-  var myTab = new Tab( $$("body")[0], 					// Target
+  var myTab = new Tab( 
                        "myTab",						// Source
                        { cssStyle         : 'simple2',	// Style
                          left             : "20px",
@@ -39,8 +47,8 @@
 						 backgroundColor  : '#907040',
 						 registerAlign    : "center",  // (left), right, center
 						 register         : "top",   // (top), bottom
-						 registerRows     : '2', // (1), 2, 3, ... max 100 :) use backgroundColor! for nice appearance
-					     registerDistance : '5' // (2), ...increase if to less !
+						 registerRows     : '5', // (1), 2, 3, ... max 100 :) use backgroundColor! for nice appearance
+					     registerDistance : '6px' // (2), ...increase if to less !
 		               }
 		               
       				 );
