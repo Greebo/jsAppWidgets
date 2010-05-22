@@ -2,45 +2,14 @@
 * shortcuts
 * register left and right
 * different color for each tab
-* 
+* border colors in a hash thät could be changed (set)
+* close and add registers
+* more styles
 */
+
 // global vars
 var g_iTabNr     = 0;
 var g_aTabWidget = new Array();
-
-// Helper
-Element.addMethods( "tr",{
-  newTD : function ( p_nElement, p_sColor )
-  {
-        var v_nTD  = new Element( "td" ).setStyle( {
-                             backgroundColor : p_sColor,
-                             paddingLeft : "1px",
-                             paddingTop  : "1px"
-                           } );
-       
-        p_nElement.appendChild( v_nTD );
-        
-        return v_nTD;
-  }
-} );
-Element.addMethods( {
-  replace : function ( p_nElement, p_nNewElement )
-  {
-    v_nParent = p_nElement.up();
-//    v_nOldElement = p_nElement;
-    v_nParent.replaceChild( p_nNewElement, p_nElement );
-//    return v_nOldElement;
-  }
-} );
-
-Element.addMethods( {
-  replace : function ( p_nElement, p_nNewElement )
-  {
-    // save parent (dont't try p_nElement.up().replacechild(..., p_nElement) !!!!!!
-    v_nParent = p_nElement.up();
-    v_nParent.replaceChild( p_nNewElement, p_nElement );
-  }
-} );
 
 
 // Superclass
@@ -49,28 +18,44 @@ var TabElement = Class.create( {
   {
     // if parent exist, the parent is the master node
     try { 
-      this.m_iTabNr     = p_oCaller.m_iTabNr; 
-      this.m_bHasParent = true; 
+      this.m_iTabNr        = p_oCaller.m_iTabNr; 
+      this.m_bIsMainObject = false; 
         }
-    catch (e){ // otherwise this node is the master node
+    catch (e) { // otherwise this node is the master node
       // write object in global var
       g_aTabWidget[this.m_iTabNr = g_iTabNr++] = this;
-      this.m_bHasParent = false;
-    };
+      this.m_bIsMainObject = true;
+              };
 
     // stores the number of actual page
     this.m_iActPage = 1;
 
     // Source html code
     this.m_nSource     = $(p_nSource);
-    // id of the Source HTML
-    this.m_sSourceID   = this.m_nSource.id;
+
+    // id of the Source HTML -> will be id of the created element
+    this.m_sID   = this.m_nSource.id;
     
-    // Style Infos
-    this.m_hStyle      = this.initStyle( $H(p_hStyle) );
+    // Style Infos in this.m_hStyle
+    this.initStyle( $H(p_hStyle) );
+
+    // page vars
+    this.m_aRegisterNames     = new Array();
+    this.m_aRegisterGfx       = new Array();
+    this.m_aRegisterActive    = new Array();
+      
+    // store all tabnames, gfx and active (allow) status
+    for( i = 0; v_nMyPage = $$( "#"+this.m_nSource.id+" .tabPage"  )[i ]; i++  )
+    {
+      this.m_aRegisterNames[i+1]  = v_nMyPage.getAttribute( "name" );
+      this.m_aRegisterGfx[i+1]    = v_nMyPage.getAttribute( "gfx" );
+      this.m_aRegisterActive[i+1] = ( v_nMyPage.getAttribute( "inactive" ) != null )? 0 : 1;
+    }
+    // how many register pages?
+    this.m_iCntRegPages = i;
 
     // generate the element, anker  and identify it, if master
-    if (  !this.m_bHasParent )
+    if (  this.m_bIsMainObject )
     {
       this.element = this.m_nSource;
       this.redraw();
@@ -80,9 +65,50 @@ var TabElement = Class.create( {
       this.element = this.create( );
   },
 
-  initStyle :    function( p )      { return p; },  
+  initStyle :    function( p_hStyle )      
+  {
+    // no convert if child; parent has it already done
+    if ( !this.m_bIsMainObject && this.m_hStyle )
+      return;
+    
+    // defaults
+    this.m_hStyle = $H( { cssStyle         : "",
+                          left             : "0px",
+                          top              : "0px",
+                          width            : "0px",
+                          height           : "0px",
+                          backgroundColor  : "",
+                          selectedColor    : "",
+                          regPos           : "top",
+                          regAlign         : "left",
+                          regRows          : '1',
+                          regDistance      : '2'
+                       } );
+
+    // override default values with parameter hash   
+    this.m_hStyle.update( p_hStyle );
+
+    // more than 1 row => align is 'center' !
+    if( this.m_hStyle.get('regRows') > 1 ) 
+      this.m_hStyle.set('regAlign','center');
+  },
+  
   create :       function()         { return 'none'; },
-  set :          function( p_iPage ){ this.m_iActPage = p_iPage; },
+
+  set :  function( p_iPage )
+  { 
+    if ( !this.isInactive( p_iPage ) )
+      this.m_iActPage = p_iPage;
+    else
+      return false;
+  },
+  
+  isInactive : function( p_iPage )
+  {
+    // no incactive page and no page that not exist
+    return ( !this.m_aRegisterActive[ p_iPage ] || (this.m_iCntRegPages < p_iPage));
+  },
+
   get :          function()         { return this.m_iActPage; },
   redraw :       function()      
   { 
@@ -90,18 +116,18 @@ var TabElement = Class.create( {
     this.element.replace( v_nNewElement );
     this.element  = v_nNewElement; 
 
-    if ( !this.m_bHasParent ) // node is master
-    { // new id
-    //  this.m_nSource.replace( this.element );
+    if ( this.m_bIsMainObject ) // node is master
+    { 
+      //  this.m_nSource.replace( this.element );
       this.m_nSource = this.element;
 
-      this.element.id = this.m_sSourceID;
+      this.element.id = this.m_sID;
       // replace source html node
       // add class name
       this.element.addClassName( this.m_hStyle.get('cssStyle') );
     }
-
   },
+  
   getColor : function( p_iPage )
   {
       // default Color:
@@ -139,42 +165,12 @@ var TabElement = Class.create( {
  * @example myTab = new Tab("simple", 20, 150, 250, 150, "#ececec", $( "myTab" ));
  */
 var Tab = Class.create( TabElement, {
-  
-  initialize : function( $super, p_nSource, p_hStyle )
+  /*  initialize : function( $super, p_nSource, p_hStyle, p_oCaller )
   {
-    // params in member
-    $super( p_nSource, p_hStyle );
+    $super( p_nSource, p_hStyle, p_oCaller );
   },
-
-  // intern : call from Superclass
-  initStyle : function( $super, p_hStyle )
-  {
-    // defaults
-    v_hStyle = $H( { cssStyle         : "",
-                     left             : "0px",
-                     top              : "0px",
-                     width            : "0px",
-                     height           : "0px",
-                     backgroundColor  : "",
-                     selectedColor    : "",
-                     register         : "top",
-                     registerAlign    : "left",
-                     registerRows     : '1',
-                     registerDistance : '2'
-                 } );
-
-    // override default values with parameter hash   
-    v_hStyle.update( p_hStyle );
-    
-    // more than 1 row => align is 'center' !
-    if( v_hStyle.get('registerRows') > 1 ) 
-      v_hStyle.set('registerAlign','center');
-    
-    // return converted style --> no call of superclass method
-    return v_hStyle;
-    
-  },
-  
+*/
+  // no extra init (initialze from parend is enough
   /**
    * method to generate the tab-node
    * 
@@ -189,32 +185,28 @@ var Tab = Class.create( TabElement, {
    *  
    * @private
    */
-  create : function(  )
+  create : function()
   {
+    // a div over the whole tab
+    this.m_nTab = new Element( "table", {cellSpacing: 0, cellPadding : 0} );
+    this.m_nTab.setStyle( { left   : this.m_hStyle.get('left'),
+                            top    : this.m_hStyle.get('top')
+                          } );
+
     // new Object for Folders
     this.m_oRegister = new TabRegister( this.m_nSource, this.m_hStyle, this );
     // new Box
     this.m_oBox      = new TabBox(      this.m_nSource, this.m_hStyle, this );
 
-    // a div over the whole tab
-    this.m_nTab = new Element( "table", {cellSpacing: 0, cellPadding : 0} );
-
-    //this.m_nTab.id = this.m_sSourceID;
-
-    
-    this.m_nTab.setStyle( { left   : this.m_hStyle.get('left'),
-                            top    : this.m_hStyle.get('top')
-                          } );
-
+    //insert the two TabElements (register + box) in the node
     v_nRegisterTD = new Element("td");
     v_nRegisterTD.appendChild( this.m_oRegister.element );  
     v_nBoxTD      = new Element( "td" );
     v_nBoxTD.appendChild( this.m_oBox.element );
 
-    // first Row
+    // which order? first register than box? or reverse?
     v_nTR = this.m_nTab.insertRow( 0 );
-
-    switch ( this.m_hStyle.get('register'))
+    switch ( this.m_hStyle.get('regPos'))
     {
       case 'top' :
         v_nTR.appendChild( v_nRegisterTD );
@@ -225,10 +217,9 @@ var Tab = Class.create( TabElement, {
         this.m_nTab.insertRow( -1 ).appendChild( v_nRegisterTD );
         break;
     }
-    // return the new node
+    // return the new created node
     return this.m_nTab;
-  
-   },
+  },
   
   /**
    * opens the Page.
@@ -243,14 +234,12 @@ var Tab = Class.create( TabElement, {
    */
   set : function( $super, p_iPageNr )
   {
+    $super( p_iPageNr );
+
     // set() for the two inner objects
-    if ( this.m_oRegister.set( p_iPageNr ) )
-      this.m_oBox.set(      p_iPageNr );
-
-    return $super( p_iPageNr );
-
+    this.m_oRegister.set( p_iPageNr );
+    this.m_oBox.set(      p_iPageNr );
   }
- 
 });
 
 
@@ -261,43 +250,33 @@ var Tab = Class.create( TabElement, {
  * 
  * @param {node,string} source Source DIV node (or id) 
  * @param {hash}        style style elements:
- * { cssStyle, left, top, backgroundColor, register, registerAlign, registerRows, registerDistance } 
+ * { cssStyle, left, top, backgroundColor, register, regAlign, regRows, regDistance } 
  * 
  * @constructor
  * 
  * @example myTabRegister = new TabRegister( "simple", { left : '10px', top : '10px', 'backgroundColor : 'blue' } );
  */
 var TabRegister = Class.create( TabElement, {
-  initialize : function ( $super, p_nSource, p_hStyle, p_oCaller )
+/*  initialize : function( $super, p_nSource, p_hStyle, p_oCaller )
   {
     $super( p_nSource, p_hStyle, p_oCaller );
   },
-  
+*/
   // subfunction from constructor
   initStyle : function( $super, p_hStyle )
   {
-    // page vars
-    this.m_aRegisterNames     = new Array();
-    this.m_aRegisterGfx       = new Array();
-    this.m_aRegisterActive    = new Array();
-      
-    // store all tabnames, gfx and active (allow) status
-    for( i = 0; v_nMyPage = $$( "#"+this.m_nSource.id+" .tabPage"  )[i ]; i++  )
-    {
-      this.m_aRegisterNames[i+1]  = v_nMyPage.getAttribute( "name" );
-      this.m_aRegisterGfx[i+1]    = v_nMyPage.getAttribute( "gfx" );
-      this.m_aRegisterActive[i+1] = ( v_nMyPage.getAttribute( "inactive" ) != null )? 0 : 1;
-    }
-    // how many register pages?
-    this.m_iCntRegPages = i;
-    if ( p_hStyle.get( 'registerRows' ) > i )   p_hStyle.set( 'registerRows', i) ;
-    if ( p_hStyle.get( 'registerRows' ) > 100 ) p_hStyle.set( 'registerRows', 100); 
-      
-    // Define register pages
-    //                 bgCol, links    oben/unten  rechts1  rechts2 inner bg
-    this.m_sRegColTbl = new Array( "",    "white",   "white",  "gray", "black", p_hStyle.get('backgroundColor'), p_hStyle.get('backgroundColor'));
+    $super( p_hStyle );
+    
+    // limit register counts
+    if ( this.m_hStyle.get( 'regRows' ) > this.m_iCntRegPages )
+      this.m_hStyle.set( 'regRows', this.m_iCntRegPages);
+    if ( this.m_hStyle.get( 'regRows' ) > 100 ) 
+      this.m_hStyle.set( 'regRows', 100); 
+
+    // Define register page colors
+    this.m_sRegColTbl = new Array( "", "white", "white", "gray", "black", this.m_hStyle.get('backgroundColor'), this.m_hStyle.get('backgroundColor'));
     // change color if bottom register
-    if( p_hStyle.get('register') == "bottom" )
+    if( this.m_hStyle.get('regPos') == "bottom" )
     {
       this.m_sRegColTbl[2] = "black";
       this.m_sRegColTbl[6] = "gray";
@@ -315,13 +294,6 @@ var TabRegister = Class.create( TabElement, {
     // Position of GFX and NAME in RegPageTbl
     this.m_aGfxPos  = ( { x: 2, y : 2 } );
     this.m_aNamePos = ( { x: 3, y : 2 } );
-    
-    return $super( p_hStyle );
-  },
-  pageValid : function( p_iPage )
-  {
-    // no incactive page and no page that not exist
-    return ( this.m_aRegisterActive[ p_iPage ] && (this.m_iCntRegPages >= p_iPage));
   },
   /**
    * generates the Registers
@@ -330,45 +302,45 @@ var TabRegister = Class.create( TabElement, {
    * 
    * @private
    */
-   
    create : function()
    {
-     // align
-     var v_sRegisterAlign = this.m_hStyle.get('registerAlign');
-     
      // table over the register rows
      var v_nTable = new Element( "table", { cellSpacing : 0, cellPadding : 0 } );
-     v_nTable.setStyle( {  width : '100%' } );
+     v_nTable.setStyle( { width : '100%' } );
 
      var v_nTR = "";
      var v_nTD = "";
-     var v_iAnzRows = this.m_hStyle.get( 'registerRows' );
-     var v_fOffset = ( this.m_iCntRegPages / v_iAnzRows );
-     var v_iDistanceIndex = 0;
+     var v_iCntRows = this.m_hStyle.get( 'regRows' );
+     var v_fOffset = ( this.m_iCntRegPages / v_iCntRows );
      
      // build all register rows in a table
-     for ( var v_nRow = 1; v_nRow <= v_iAnzRows; v_nRow++ )
+     for ( var v_iRow = 1; v_iRow <= v_iCntRows; v_iRow++ )
      {
        // create new register row
-       v_iStart = parseInt( v_fOffset * (v_nRow-1)) + 1;
-       v_iEnd   = parseInt( v_fOffset * v_nRow);
-       v_bActPageInRegister = ( v_iStart <= this.m_iActPage && v_iEnd >= this.m_iActPage );
+       v_iStart = parseInt( v_fOffset * (v_iRow-1)) + 1; // start page of register
+       v_iEnd   = parseInt( v_fOffset * v_iRow);         // end page of register
+       v_bActPageInRegister = ( v_iStart <= this.m_iActPage && v_iEnd >= this.m_iActPage ); // flag (is active page in this register row?)
        v_nRegisterRow = this.createRow( v_iStart, v_iEnd, v_bActPageInRegister );
 
        if ( !v_bActPageInRegister )
        {
-         // make overlapping
-         v_sDistance = (1 * parseInt(this.m_hStyle.get('registerDistance')) ) 
-                          * ( this.m_hStyle.get('register')  == 'bottom' ? (-1): 1 );
+         // make overlapping ( go <n> pixels down )
+         v_sDistance = parseInt(this.m_hStyle.get('regDistance'));
+         if ( this.m_hStyle.get('regPos')  == 'bottom' ) 
+           v_sDistance *= (-1);
          
-         v_nRegisterRow.setStyle( { top: v_sDistance +'px', position:'relative', zIndex : 100 - v_nRow } );
+         v_nRegisterRow.setStyle( { top      : v_sDistance +'px', 
+                                    position :'relative', 
+                                    zIndex   : this.m_hStyle.get('regRows') - v_iRow } );
 
-         v_nTR = v_nTable.insertRow( (-1) * (this.m_hStyle.get('register')  == 'bottom') );
+         v_nTR = v_nTable.insertRow( (-1) * (this.m_hStyle.get('regPos') == 'bottom') );
        }
        else // first line (front line)
        {
-         v_nRegisterRow.setStyle( {position : 'relative', zIndex : 100 } );
-         v_nTR = v_nTable.insertRow( (-1) * (this.m_hStyle.get('register') == 'top'  ) );
+         v_nRegisterRow.setStyle( { position : 'relative', 
+                                    zIndex   : this.m_hStyle.get( 'regRows' ) } );
+         
+         v_nTR = v_nTable.insertRow( (-1) * (this.m_hStyle.get('regPos') == 'top'  ) );
        }
 
        // append in table
@@ -382,37 +354,33 @@ var TabRegister = Class.create( TabElement, {
      // return the whole node
      return v_nTable;
    },
-     
-   
-   
    
    createRow : function( p_iLeft, p_iRight, p_bActPageInRegister )
    {
      // table over all page Registers
      var v_nTable = new Element( "table", { cellSpacing : 0, cellPadding : 0 } );
-     v_nTable.setStyle( { 'width' : '100%' } );
+     v_nTable.setStyle( { width : '100%' } );
 
      // new row in table
      var v_nTR = $(v_nTable.insertRow(0));
-     var v_sRegisterAlign = this.m_hStyle.get('registerAlign');
+     var v_sRegAlign = this.m_hStyle.get('regAlign');
      
      // left filler    
-     if ( this.m_iActPage != p_iLeft || v_sRegisterAlign == 'right' )
-         v_nTR.appendChild( this.createFiller( true, p_bActPageInRegister ) );
+     if ( this.m_iActPage != p_iLeft || v_sRegAlign == 'right' )
+         v_nTR.appendChild( this.createFiller( true, p_bActPageInRegister ) ); // true == left filler
 
      // draw all pages
-     for( i = p_iLeft; i <= p_iRight; i++)
+     for( i = p_iLeft; i <= p_iRight; i++ )
      {
        // td for page
-       var v_nTD    =  new Element( "td" );
-       if( this.m_hStyle.get('register') == 'bottom' )
+       var v_nTD = new Element( "td" );
+       if( this.m_hStyle.get('regPos') == 'bottom' )
          v_nTD.vAlign = "top";
        else
          v_nTD.vAlign = "bottom";
        
-
        // make the register page        
-       v_nRegister = this.createRegisterPage( i, p_bActPageInRegister );
+       v_nRegister = this.createPage( i, p_bActPageInRegister );
 
        // anker the register page in td of Register
        v_nTD.appendChild( v_nRegister );
@@ -422,15 +390,12 @@ var TabRegister = Class.create( TabElement, {
      }
      
      // right filler (createFiller returns the td node)
-     if (  ! (p_iRight == this.m_iActPage && v_sRegisterAlign != 'left' ) )
+     if ( this.m_iActPage != p_iRight || v_sRegAlign == 'left' ) 
        v_nTR.appendChild( this.createFiller( false, p_bActPageInRegister ) );
 
      // return the new Register node
      return v_nTable;
    },
-   
-   
-   
    
    /**
     * create the left or ritht filler. 
@@ -444,21 +409,19 @@ var TabRegister = Class.create( TabElement, {
    {
      // new td node for the filler
      v_nTD = new Element("td").addClassName( "filler" );
-  
-     v_sRegisterAlign = this.m_hStyle.get('registerAlign');
-     
+       
      // stretch  filler?
-     if(   (  p_bLeft && v_sRegisterAlign == 'right' )
-       ||  ( !p_bLeft && v_sRegisterAlign == 'left' ) )
+     if(  (  p_bLeft && this.m_hStyle.get('regAlign') == 'right' )
+       || ( !p_bLeft && this.m_hStyle.get('regAlign') == 'left'  ) )
        v_nTD.setStyle( { width : "100%" } );
 
      // bottom or top border
-     if ( p_bDrawBorder )
+     if ( p_bDrawBorder ) // only in front row of register the border must be visible
      {
-       switch( this.m_hStyle.get('register') )
+       switch( this.m_hStyle.get('regPos') )
        {
-         case 'bottom': v_nTD.style.borderTop    = "1px solid black";  break;
-         case 'top'   : v_nTD.style.borderBottom = "1px solid white"; break;
+         case 'bottom': v_nTD.setStyle( { borderTop    : "1px solid black" } );  break;
+         case 'top'   : v_nTD.setStyle( { borderBottom : "1px solid white" } ); break;
        }
      }
 
@@ -466,9 +429,9 @@ var TabRegister = Class.create( TabElement, {
      v_nBox = new Element( "div" ).setStyle( {width : "1px"} );
      v_nTD.appendChild( v_nBox );
   
+     // return the new filler
      return v_nTD;
  },
-   
    
  /**
   * draw a page in the register
@@ -479,51 +442,56 @@ var TabRegister = Class.create( TabElement, {
   * 
   * @private 
   */
-  createRegisterPage : function( p_iPage, p_bCutBorder )
+  createPage : function( p_iPage, p_bCutBorder )
   {
     var v_sSelected = "";
     // Page is the actual one?
     if ( p_iPage == this.m_iActPage )
     {
       v_sSelected = "Selected"; 
-      this.m_aRegPageColTbl[3] = this.m_aRegPageColTbl[2];
+      this.m_aRegPageColTbl[3] = this.m_aRegPageColTbl[2]; // no border line
     }
     else // not actual
-      this.m_aRegPageColTbl[3] = new Array( 2, 2, 2, 2, 2, 2 );
+      this.m_aRegPageColTbl[3] = new Array( 2, 2, 2, 2, 2, 2 ); // a white or black line
  
     // Set the ColorColor:
     this.m_sRegColTbl[5] = this.getColor( p_iPage );   
       
-    // generate the table element
+    // generate the table element for the page
     var v_nTable = new Element( "table", { cellSpacing: 0, cellPadding : 0 });
     v_nTable.setStyle({ width : "100%" });  // needed for chrome
 
-    // start and end point of register page 
+    // start and end point of register page (cut the border if page is neighbor of active page
+    // and the active page is in same row
     v_iStartColmn = ( p_iPage == this.m_iActPage + 1 && p_bCutBorder ? 2 : 0 );
     v_iEndColmn   = ( p_iPage == this.m_iActPage - 1 && p_bCutBorder ? 3 : 5 );
 
-    // 4 rows
+    // 4 rows (only 3 if the row is not the first in the front)
     for( var v_iRow = 0 ; v_iRow < (p_bCutBorder ? 4 : 3); v_iRow++ )
     {
       // new TR on first child or last
-      v_nTR = $(v_nTable.insertRow( (this.m_hStyle.get('register') == 'top') * v_iRow ));
+      v_nTR = $(v_nTable.insertRow( (this.m_hStyle.get('regPos') == 'top') * v_iRow ));
         
       for( var v_iClmn = v_iStartColmn; v_iClmn <= v_iEndColmn; v_iClmn++ )
       {
-        // new td in tr
-        v_nTD =  v_nTR.newTD( this.m_sRegColTbl[ this.m_aRegPageColTbl[v_iRow][v_iClmn] ] );
-          
+        // new td in tr with correct background color
+        var v_nTD  = new Element( "td" ).setStyle( {
+                     backgroundColor : this.m_sRegColTbl[ this.m_aRegPageColTbl[v_iRow][v_iClmn] ],
+                     paddingLeft     : "1px",
+                     paddingTop      : "1px"  } );
+        v_nTR.appendChild( v_nTD );
+
         // gfx node must be filled
         if ( v_iRow == this.m_aGfxPos.y && v_iClmn == this.m_aGfxPos.x && this.m_aRegisterGfx[p_iPage] ) 
         {
           v_nTD.addClassName( "tabsGfx" + v_sSelected );
           v_nTD.appendChild( new Element( "img", { 'src' : this.m_aRegisterGfx[p_iPage] +''}  ).setStyle( { border : 'none' } ) );
-          
         }
-        else if( v_iRow == this.m_aNamePos.y && v_iClmn == this.m_aNamePos.x ) //Text node
+      //Text node
+        else if( v_iRow == this.m_aNamePos.y && v_iClmn == this.m_aNamePos.x ) 
         {
           v_nTD.addClassName( "tabsName" + v_sSelected );
-          v_nTD.style.width = "100%";
+          v_nTD.setStyle( { width : "100%" } );
           v_nTD.appendChild( document.createTextNode( this.m_aRegisterNames[p_iPage] ));
           v_nTable.style.whiteSpace = 'nowrap';
         }
@@ -545,24 +513,13 @@ var TabRegister = Class.create( TabElement, {
     return v_nA;
   },
    
-
-
-  
-  
   set : function( $super, p_iPageNr )
   {
-
-    if ( !this.pageValid( p_iPageNr ) )
-      return false;
-
     $super( p_iPageNr );
-    
+    // the registers must be refreshed    
     this.redraw();
-    return true;
   }
-  
 });
-
 
 
 /**
@@ -588,14 +545,20 @@ var TabBox = Class.create( TabElement, {
   {
     $super( p_nSource, p_hStyle, p_oCaller );
   },
+
+  initStyle : function ( $super, p_hStyle )
+  {
+    $super( p_hStyle );
+    
+    // if master, position is set to none -> no border will be eliminated 
+    if ( this.m_bIsMainObj )
+      this.m_hStyle.set( regPos, "none" ); 
+  },
+  
   create : function(   )
   {
-    // box over the tab
-    this.m_nBox = new Element( "div",
-      {
-        id : "TabBox" + this.m_iTabNr
-      } );
-
+    // box node
+    this.m_nBox = new Element( "div" );
     this.m_nBox.setStyle(
       {
         borderRight     : '1px solid black',
@@ -606,49 +569,49 @@ var TabBox = Class.create( TabElement, {
         width           : this.m_hStyle.get('width')
       } );
     
-    // remove border at register side
-    switch ( this.m_hStyle.get('register') )
+    // maybe remove one border side
+    switch ( this.m_hStyle.get('regPos') )
     {
-      case 'bottom' : this.m_nBox.style.borderBottom = ''; break;
-      case 'top'    : this.m_nBox.style.borderTop    = ''; break;
+      case 'bottom' : this.m_nBox.setStyle( { borderBottom : '' }); break;
+      case 'top'    : this.m_nBox.setStyle( { borderTop    : '' }); break;
     }
-
+    
     // inner box for 2nd border column
-    var v_nInnerBox = new Element( "div" ).addClassName( "tabBox" );
-    v_nInnerBox.style.height = this.m_hStyle.get('height');
-    if ( this.m_hStyle.get('register') != 'right' )
-      v_nInnerBox.style.borderRight = '1px solid gray';   
-    if ( this.m_hStyle.get('register') != 'bottom' )
+    var v_nInnerBox = new Element( "div" ).addClassName( "tabContainer" );
+    $(v_nInnerBox).setStyle( { height : this.m_hStyle.get('height') } );
+    // second line on bottom, if not bottom registers
+    if ( this.m_hStyle.get('regPos') != 'bottom' )
       v_nInnerBox.style.borderBottom = '1px solid gray';   
 
-    // set the actual page
-    this.set(  this.m_iActPage );
-   
-    // all pages 
-    var v_nAllPageDIV = $$("#"+this.m_nSource.id + " div.tabPage");
-    $A( v_nAllPageDIV ).each( function( n ){ v_nInnerBox.appendChild( $(n) ); } );
-
-    //    v_nInnerBox.appendChild( this.m_nSource );
+    // v_nInnerBox.appendChild( this.m_nSource );
     this.m_nBox.appendChild( v_nInnerBox);
 
+    // set the actual page
+    this.set( this.m_iActPage );
+
+    // insert all pages in the 'inner boxes' 
+    var v_nAllPageDIV = $$("#" + this.m_sID + " div.tabPage");
+    $A( v_nAllPageDIV ).each( function( n ){ v_nInnerBox.appendChild( $(n) ); } );
+   
+    // return the new node
     return this.m_nBox;
   },
   
   set : function( $super, p_iPageNr )
   {
-    if ($super != "")
-      $super( p_iPageNr );
+    // set the actPage if possible
+    $super( p_iPageNr ); 
     
-    var v_nAllPageDIV = $$("#"+this.m_sSourceID + " div.tabPage");
+    // hide all Pages
+    var v_nAllPageDIV = $$("#"+this.m_sID + " div.tabPage");
     $A( v_nAllPageDIV ).each( Element.hide );
 
+    // make the active Page visible
     v_nAllPageDIV[this.m_iActPage -1].setStyle( { display : "block" });
     if ( this.element)
-      this.element.style.backgroundColor = this.getColor(this.m_iActPage );
+      this.element.setStyle( { backgroundColor : this.getColor( this.m_iActPage ) } );
   }
-
 });
-
 
 
 /** selects a special page in a tab. This is needed for the links on the Registers :
@@ -662,13 +625,21 @@ var TabBox = Class.create( TabElement, {
 function setPage( p_iTabNr, p_iPageNr )
 {
    g_aTabWidget[p_iTabNr].set( p_iPageNr );
-   
 }
 
-// helper
+//Helper
 function linkClick( e )
 {
   // do the upper click event (only in ie)
   if( e.findElement("a").click ) 
     e.findElement("a").click();
 }
+
+// prototype.extentions
+Element.addMethods( {
+  replace : function ( p_nElement, p_nNewElement )
+  {
+    v_nParent = p_nElement.up();
+    v_nParent.replaceChild( p_nNewElement, p_nElement );
+  }
+} );

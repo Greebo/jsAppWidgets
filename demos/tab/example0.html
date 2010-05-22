@@ -95,25 +95,25 @@
 <td>color of the selected page</td>
 </tr>
 <tr>
-<td><b>registerAlign</b> </td>
+<td><b>regAlign</b> </td>
 <td>left, right or center align</td> 
 </tr>
 <tr>
-<td><b>register    </b>  </td>
+<td><b>regPos    </b>  </td>
 <td>top or bottom register</td>
 </tr>
 <tr>
-<td><b>registerRows</b>  </td>
+<td><b>regRows</b>  </td>
 <td>count of register rows</td>
 </tr>
 <tr>
-<td><b>registerDistance</b>   </td>
+<td><b>regDistance</b>   </td>
 <td>distance offset for register rows</td>   
 </tr>
 </table>
 
 </td>
-<td>
+<td vAlign=top>
 
 <h2>style attributes</h2>
 
@@ -138,14 +138,10 @@
 <td><b>selectedColor</b></td> 
 <td>color of the selected page</td>
 </tr>
-<tr>
-<td><b>register</b>  </td>
-<td>top or bottom register</td>
-</tr>
 </table>
 
 </td>
-<td>
+<td >
 
 <h2>style attributes</h2>
 
@@ -179,19 +175,19 @@
 <td>color of the selected page</td>
 </tr>
 <tr>
-<td><b>register</b>  </td>
+<td><b>regPos</b>  </td>
 <td>top or bottom register</td>
 </tr>
 <tr>
-<td><b>registerAlign</b> </td>
+<td><b>regAlign</b> </td>
 <td>left, right or center align</td> 
 </tr>
 <tr>
-<td><b>registerRows</b>  </td>
+<td><b>regRows</b>  </td>
 <td>count of register rows</td>
 </tr>
 <tr>
-<td><b>registerDistance</b>   </td>
+<td><b>regDistance</b>   </td>
 <td>distance offset for register rows</td>   
 </tr>
 </table>
@@ -209,22 +205,23 @@
         { cssStyle     : 'simple',	// Style (hash) in css : e.g. 'simple' ->> css-Style-Class is '.Tab-simple'
 		  backgroundColor  : '#a08080',  // (none) background color of the pages
 		  selectedColor    : '#d48080',  // (none) active page color
-		  registerAlign    : "left",   // (left), right, center
-		  register         : "bottom",      // (top), bottom
-		  registerRows     : '1',        // (1), 2, 3, ... max 100 :) use backgroundColor! for nice appearance
- 		  registerDistance : '4px'       // (2), ...increase if to less !
+		  regAlign    : "left",   // (left), right, center
+		  regPos         : "top",      // (top), bottom
+		  regRows     : '1',        // (1), 2, 3, ... max 100 :) use backgroundColor! for nice appearance
+ 		  regDistance : '4px'       // (2), ...increase if to less !
 		}
-);
+       );
 
+ 
 var myTabBox = new TabBox( "myTabBox",				  		// Source HTML (id or node)
     { cssStyle     : 'simple',	// Style (hash) in css : e.g. 'simple' ->> css-Style-Class is '.Tab-simple'
 	  width            : "250px",    // (0px) width (inner tab container)    
       height           : "200px",    // (0px) height (of the inner tab container, display aera). Do NOT %-value here!!
 	  backgroundColor  : '#a08080',  // (none) background color of the pages
 	  selectedColor    : '#d48080',  // (none) active page color
-	  register         : "top",      // (top), bottom
+	  regPos         : "top",      // (top), bottom
     }
-);
+    );
 
 var myTab = new Tab(   "myTab",				  		// Source HTML (id or node)
       { cssStyle         : 'simple',	// Style (hash) in css : e.g. 'simple' ->> css-Style-Class is '.Tab-simple'
@@ -234,12 +231,12 @@ var myTab = new Tab(   "myTab",				  		// Source HTML (id or node)
 		height           : "200px",    // (0px) height (of the inner tab container, display aera). Do NOT %-value here!!
 		backgroundColor  : '#a08080',  // (none) background color of the pages
 		selectedColor    : '#d48080',  // (none) active page color
-		registerAlign    : "left",   // (left), right, center
-		register         : "bottom",      // (top), bottom
-		registerRows     : '1',        // (1), 2, 3, ... max 100 :) use backgroundColor! for nice appearance
-		registerDistance : '4px'       // (2), ...increase if to less !
+		regAlign    : "left",   // (left), right, center
+		regPos         : "top",      // (top), bottom
+		regRows     : '1',        // (1), 2, 3, ... max 100 :) use backgroundColor! for nice appearance
+		regDistance : '4px'       // (2), ...increase if to less !
 	  }
-);
+     );
 
 
 
