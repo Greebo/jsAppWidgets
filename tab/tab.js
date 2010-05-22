@@ -23,6 +23,15 @@ Element.addMethods( "tr",{
         return v_nTD;
   }
 } );
+Element.addMethods( {
+  replace : function ( p_nElement, p_nNewElement )
+  {
+    v_nParent = p_nElement.up();
+//    v_nOldElement = p_nElement;
+    v_nParent.replaceChild( p_nNewElement, p_nElement );
+//    return v_nOldElement;
+  }
+} );
 
 Element.addMethods( {
   replace : function ( p_nElement, p_nNewElement )
