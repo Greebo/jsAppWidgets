@@ -2,7 +2,7 @@
 * shortcuts
 * register left and right
 * different color for each tab
-* border colors in a hash thät could be changed (set)
+* border colors in a hash that could be changed (set)
 * close and add registers
 * more styles
 */
@@ -117,6 +117,32 @@ var TabElement = Class.create( {
   isActive   : function( p_iPage ) { return !isInactive(p_iPage); },
   isInactive : function( p_iPage ) { return ( !this.m_aRegActive[ p_iPage ] || (this.m_iCntRegPages < p_iPage)); },
 
+  next       : function()
+  {
+    var v_bfound = false;
+    var v_iActPage = this.m_iActPage +1;
+    while( !v_bFound && v_iActPage != vthis.m_iActPage )
+    {
+      if( v_iActPage > this.m_iCntRegPages )
+        v_iActPage = 1;
+      if( this.isActive( v_iActPage ) )
+          v_bFound = true;
+    }
+    this.set(  v_iActPage );
+  },
+  prev       : function()
+  {
+    var v_bfound = false;
+    var v_iActPage = this.m_iActPage -1;
+    while( !v_bFound && v_iActPage != vthis.m_iActPage )
+    {
+      if( v_iActPage == 0 )
+        v_iActPage = this.m_iCntRegPages;
+      if( this.isActive( v_iActPage ) )
+          v_bFound = true;
+    }
+    this.set( v_iActPage );
+  },
   redraw :       function()      
   { 
     v_nNewElement = this.create();
@@ -244,45 +270,53 @@ var Tab = Class.create( TabElement, {
   set : function( $super, p_iPage )
   {
     $super( p_iPage );
-    // set() for the two inner objects
     this.m_oRegister.set( p_iPage );
     this.m_oBox.set(      p_iPage );
   },
   setActive   : function( $super, p_iPage )
   {
     $super( p_iPage );
-    // set() for the two inner objects
     this.m_oRegister.setActive( p_iPage );
     this.m_oBox.setActive(      p_iPage );
   },
   setInactive : function( $super, p_iPage ) 
   {
     $super( p_iPage );
-    // set() for the two inner objects
     this.m_oRegister.setInactive( p_iPage );
     this.m_oBox.setInactive(      p_iPage );
   },
   setName     : function( $super, p_iPage, p_sName ) 
   {
     $super( p_iPage, p_sName );
-    // set() for the two inner objects
     this.m_oRegister.setName( p_iPage, p_sName );
     this.m_oBox.setName(      p_iPage, p_sName );
   },
   setGfx      : function( $super, p_iPage, p_sGfx  ) 
   {
     $super( p_iPage, p_sGfx );
-    // set() for the two inner objects
     this.m_oRegister.setGfx( p_iPage, p_sGfx );
     this.m_oBox.setGfx(      p_iPage, p_sGfx );
   },
   setStyle    : function( $super, p_hStyle )
   {
     $super( p_hStyle );
-    // set() for the two inner objects
     this.m_oRegister.setStyle(  p_hStyle );
     this.m_oBox.setStyle(       p_hStyle );
+  },
+
+  next        : function( $super, p_hStyle )
+  {
+    $super(  );
+    this.m_oRegister.next();
+    this.m_oBox.next();
+  },
+  prev         : function( $super )
+  {
+    $super( );
+    this.m_oRegister.prev();
+    this.m_oBox.setprev();
   }
+
 });
 
 
