@@ -40,16 +40,16 @@ var TabElement = Class.create( {
     this.initStyle( $H(p_hStyle) );
 
     // page vars
-    this.m_aRegisterNames     = new Array();
-    this.m_aRegisterGfx       = new Array();
-    this.m_aRegisterActive    = new Array();
+    this.m_aRegName      = new Array();
+    this.m_aRegGfx       = new Array();
+    this.m_aRegActive    = new Array();
       
     // store all tabnames, gfx and active (allow) status
     for( i = 0; v_nMyPage = $$( "#"+this.m_nSource.id+" .tabPage"  )[i ]; i++  )
     {
-      this.m_aRegisterNames[i+1]  = v_nMyPage.getAttribute( "name" );
-      this.m_aRegisterGfx[i+1]    = v_nMyPage.getAttribute( "gfx" );
-      this.m_aRegisterActive[i+1] = ( v_nMyPage.getAttribute( "inactive" ) != null )? 0 : 1;
+      this.m_aRegName[i+1]   = v_nMyPage.getAttribute( "name" );
+      this.m_aRegGfx[i+1]    = v_nMyPage.getAttribute( "gfx" );
+      this.m_aRegActive[i+1] = ( v_nMyPage.getAttribute( "inactive" ) != null )? 0 : 1;
     }
     // how many register pages?
     this.m_iCntRegPages = i;
@@ -93,23 +93,30 @@ var TabElement = Class.create( {
       this.m_hStyle.set('regAlign','center');
   },
   
-  create :       function()         { return 'none'; },
+  create   : function() { return 'none'; }, 
+  get      : function() { return this.m_iAktPage; },
+  getStyle : function() { return m_hStyle; },
+  getName  : function( p_iPage ) { return this.m_aRegName[p_iPage] ;},
+  getGfx   : function( p_iPage ) { return this.m_aRegGfx[p_iPage]; },
+  getColor : function( p_iPage ) // if no page, the background color is returned
+  {
+      // default Color:
+    var v_sColor = this.m_hStyle.get('backgroundColor');
+    
+    // general color
+    if (arguments.length == 0 )
+      return v_sColor;
+      
+    // selected Color
+    if ( this.m_hStyle.get( 'selectedColor' ) != "" && p_iPage == this.m_iActPage)
+      v_sColor = this.m_hStyle.get( 'selectedColor' );
 
-  set :  function( p_iPage )
-  { 
-    if ( !this.isInactive( p_iPage ) )
-      this.m_iActPage = p_iPage;
-    else
-      return false;
+    return v_sColor;
   },
   
-  isInactive : function( p_iPage )
-  {
-    // no incactive page and no page that not exist
-    return ( !this.m_aRegisterActive[ p_iPage ] || (this.m_iCntRegPages < p_iPage));
-  },
+  isActive   : function( p_iPage ) { return !isInactive(p_iPage); },
+  isInactive : function( p_iPage ) { return ( !this.m_aRegActive[ p_iPage ] || (this.m_iCntRegPages < p_iPage)); },
 
-  get :          function()         { return this.m_iActPage; },
   redraw :       function()      
   { 
     v_nNewElement = this.create();
@@ -127,22 +134,20 @@ var TabElement = Class.create( {
       this.element.addClassName( this.m_hStyle.get('cssStyle') );
     }
   },
-  
-  getColor : function( p_iPage )
-  {
-      // default Color:
-    var v_sColor = this.m_hStyle.get('backgroundColor');
-    
-    // general color
-    if (arguments.length == 0 )
-      return v_sColor;
-      
-    // selected Color
-    if ( this.m_hStyle.get( 'selectedColor' ) != "" && p_iPage == this.m_iActPage)
-      v_sColor = this.m_hStyle.get( 'selectedColor' );
 
-    return v_sColor;
-  }
+  set :  function( p_iPage )
+  { 
+    if ( !this.isInactive( p_iPage ) )
+      this.m_iActPage = p_iPage;
+    else
+      return false;
+  },
+  setActive   : function( p_iPage ){ this.m_aRegActive[ p_iPage ] = 1 ; this.redraw(); },
+  setInactive : function( p_iPage ){ this.m_aRegActive[ p_iPage ] = 0 ; this.redraw(); },
+  setName     : function( p_iPage, p_sName ) { this.m_aRegName[p_iPage] = p_sName; this.redraw(); },
+  setGfx      : function( p_iPage, p_sGfx  ) { this.m_aRegGfx [p_iPage] = p_sGfx; this.redraw(); },
+  setStyle    : function( p_hStyle ){ this.m_hStyle.update( p_hStyle ); this.redraw(); }
+  
 } );
 
 
@@ -165,11 +170,12 @@ var TabElement = Class.create( {
  * @example myTab = new Tab("simple", 20, 150, 250, 150, "#ececec", $( "myTab" ));
  */
 var Tab = Class.create( TabElement, {
-  /*  initialize : function( $super, p_nSource, p_hStyle, p_oCaller )
+  initialize : function( $super, p_nSource, p_hStyle, p_oCaller )
   {
     $super( p_nSource, p_hStyle, p_oCaller );
+
   },
-*/
+
   // no extra init (initialze from parend is enough
   /**
    * method to generate the tab-node
@@ -187,16 +193,19 @@ var Tab = Class.create( TabElement, {
    */
   create : function()
   {
+    // new Object for Folders
+    if ( !this.m_oRegister )
+      this.m_oRegister = new TabRegister( this.m_nSource, this.m_hStyle, this );
+    // new Box
+    if ( !this.m_oBox )
+      this.m_oBox      = new TabBox(      this.m_nSource, this.m_hStyle, this );
+
     // a div over the whole tab
     this.m_nTab = new Element( "table", {cellSpacing: 0, cellPadding : 0} );
     this.m_nTab.setStyle( { left   : this.m_hStyle.get('left'),
                             top    : this.m_hStyle.get('top')
                           } );
 
-    // new Object for Folders
-    this.m_oRegister = new TabRegister( this.m_nSource, this.m_hStyle, this );
-    // new Box
-    this.m_oBox      = new TabBox(      this.m_nSource, this.m_hStyle, this );
 
     //insert the two TabElements (register + box) in the node
     v_nRegisterTD = new Element("td");
@@ -232,13 +241,47 @@ var Tab = Class.create( TabElement, {
    *  
    * @see Tab#getPage 
    */
-  set : function( $super, p_iPageNr )
+  set : function( $super, p_iPage )
   {
-    $super( p_iPageNr );
-
+    $super( p_iPage );
     // set() for the two inner objects
-    this.m_oRegister.set( p_iPageNr );
-    this.m_oBox.set(      p_iPageNr );
+    this.m_oRegister.set( p_iPage );
+    this.m_oBox.set(      p_iPage );
+  },
+  setActive   : function( $super, p_iPage )
+  {
+    $super( p_iPage );
+    // set() for the two inner objects
+    this.m_oRegister.setActive( p_iPage );
+    this.m_oBox.setActive(      p_iPage );
+  },
+  setInactive : function( $super, p_iPage ) 
+  {
+    $super( p_iPage );
+    // set() for the two inner objects
+    this.m_oRegister.setInactive( p_iPage );
+    this.m_oBox.setInactive(      p_iPage );
+  },
+  setName     : function( $super, p_iPage, p_sName ) 
+  {
+    $super( p_iPage, p_sName );
+    // set() for the two inner objects
+    this.m_oRegister.setName( p_iPage, p_sName );
+    this.m_oBox.setName(      p_iPage, p_sName );
+  },
+  setGfx      : function( $super, p_iPage, p_sGfx  ) 
+  {
+    $super( p_iPage, p_sGfx );
+    // set() for the two inner objects
+    this.m_oRegister.setGfx( p_iPage, p_sGfx );
+    this.m_oBox.setGfx(      p_iPage, p_sGfx );
+  },
+  setStyle    : function( $super, p_hStyle )
+  {
+    $super( p_hStyle );
+    // set() for the two inner objects
+    this.m_oRegister.setStyle(  p_hStyle );
+    this.m_oBox.setStyle(       p_hStyle );
   }
 });
 
@@ -482,17 +525,17 @@ var TabRegister = Class.create( TabElement, {
         v_nTR.appendChild( v_nTD );
 
         // gfx node must be filled
-        if ( v_iRow == this.m_aGfxPos.y && v_iClmn == this.m_aGfxPos.x && this.m_aRegisterGfx[p_iPage] ) 
+        if ( v_iRow == this.m_aGfxPos.y && v_iClmn == this.m_aGfxPos.x && this.m_aRegGfx[p_iPage] ) 
         {
           v_nTD.addClassName( "tabsGfx" + v_sSelected );
-          v_nTD.appendChild( new Element( "img", { 'src' : this.m_aRegisterGfx[p_iPage] +''}  ).setStyle( { border : 'none' } ) );
+          v_nTD.appendChild( new Element( "img", { 'src' : this.m_aRegGfx[p_iPage] +''}  ).setStyle( { border : 'none' } ) );
         }
       //Text node
         else if( v_iRow == this.m_aNamePos.y && v_iClmn == this.m_aNamePos.x ) 
         {
           v_nTD.addClassName( "tabsName" + v_sSelected );
           v_nTD.setStyle( { width : "100%" } );
-          v_nTD.appendChild( document.createTextNode( this.m_aRegisterNames[p_iPage] ));
+          v_nTD.appendChild( document.createTextNode( this.m_aRegName[p_iPage] ));
           v_nTable.style.whiteSpace = 'nowrap';
         }
       } //for : all columns
@@ -500,7 +543,7 @@ var TabRegister = Class.create( TabElement, {
 
     // <a> tag over the table    
     v_nA = new Element( "a" );
-    v_nA.className = this.m_aRegisterActive[p_iPage] == 1  ? "tabsName" + v_sSelected : "tabsNameInactive";
+    v_nA.className = this.m_aRegActive[p_iPage] == 1  ? "tabsName" + v_sSelected : "tabsNameInactive";
     if ( p_iPage == this.m_iActPage )
       v_nA.href = "javascript:void(0)";
     else
