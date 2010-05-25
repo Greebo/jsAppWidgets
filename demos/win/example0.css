@@ -1,0 +1,354 @@
+body { background-color: white; color:black;font-family: ms sans serif, tahoma; font-size: 11px; margin: 0px }
+
+/*****************/
+/* WINDOW 'w2k' */
+/*****************/
+/* Definition of Window - Style 'w2k'*/
+div.w2k
+{
+   position         : relative;
+   border           : 1px solid;
+   border-color     : white #777777 gray white  ;
+   background-color : buttonface;
+   overflow         : hidden;
+}
+
+div.w2k .Title
+{
+   position         : relative;
+   background       : url('/jsappwidgets/gfx/w2k/title.jpg') repeat;
+   height           : 18px;
+   margin           : 2px;
+   margin-right     : 3px;
+}
+
+div.w2k .Title .TitlePic
+{
+   position         : absolute;
+   background       : url('/jsappwidgets/gfx/w2k/winpic.gif') no-repeat;
+   width            : 10px;
+   height           : 18px;
+   left             : 2px;
+   margin-top       : 1px;
+   width            : 15px;   /* kosmetik, kleiner machen , ist zu gross hier */
+   cursor           : pointer;
+}
+
+div.w2k .Title .TitleText
+{
+   position         : absolute;
+   margin-left      : 20px;
+   width            : 100%;
+   padding-top      : 2px;
+   font-family      : microsoft sans serif,arial,helvetica,sans-serif;
+   font-size        : 11px;
+   font-weight      : bold;
+   color            : white;
+   white-space      : nowrap;
+   cursor           : default;
+   height           : 18px;
+}
+
+div.w2k .Title .Cascade
+{
+   position         : absolute;
+   right            : 20px;
+   top              : 2px;
+   background       : url('/jsappwidgets/gfx/w2k/cascadebutton.gif') no-repeat;
+   width            : 16px;
+   height           : 18px;
+   cursor           : pointer;
+}
+
+div.w2k .Title .Close
+{
+   position         : absolute;
+   right            : 2px;
+   top              : 2px;
+   background       : url('jsappwidgets/gfx/w2k/closebutton.gif') no-repeat;
+   width            : 16px;
+   height           : 18px;
+   cursor           : pointer;
+}
+
+div.w2k .Menu
+{
+   position         : static;
+   border-top       : 1px solid gray;
+   border-left      : 1px solid white;
+   border-right     : 1px solid white;
+   border-bottom    : 1px solid gray;
+   margin-left      : 2px;
+   margin-right     : 3px;
+}
+
+div.w2k .Container             /* no border for fame-container !!*/
+{
+   position         : relative;
+   background-color : buttonface;
+   margin           : 2px;
+   margin-top       : 0px;
+/*   border           : 2px inset;*/
+/*   border-color     : buttonface white white buttonface*/
+
+}
+
+div.w2k .Status
+{
+   position         : relative;
+   border           : none;
+   padding-left     : 3px;
+   height           : 18px;
+}
+
+div.w2k .Status .StatusText
+{
+   position         : absolute;
+   border           : 1px inset;
+   border-color     : buttonface white white buttonface;
+   font-family      : microsoft sans serif,arial,helvetica,sans-serif;
+   font-size        : 11px;
+   white-space      : nowrap;
+   margin-bottom    : 2px;
+   height           : 15px;
+   padding-left     : 3px;
+   width            : 100%;
+}
+
+div.w2k .Size
+{
+   position         : absolute;
+   background-image : url('/jsappwidgets/gfx/w2k/sizebutton.gif');
+   width            : 18px;
+   height           : 15px;
+   right            : 0px;
+   border-left      : 1px solid white;
+   cursor           : se-resize;
+}
+
+
+
+/*****************/
+/* WINDOW 'beos' */
+/*****************/
+/* Definition of Window - Style 'beos'*/
+div.beos
+{
+   position         : absolute;                                /* don't change that               */
+   border           : 1px solid #AAAAAA;
+   background-color : #D8D8D8;
+   overflow         : hidden;
+   color            : gray;
+}
+
+div.beos .Title
+{
+   position         : relative;
+   background-image : url('/jsappwidgets/gfx/beos/title.gif');
+   height           : 22px;
+}
+
+div.beos .Title .TitlePic
+{
+   position         : absolute;
+   left             : 0;
+   background       : url('/jsappwidgets/gfx/beos/winpic.gif') no-repeat;
+   width            : 15px;
+   height           : 18px;
+   cursor           : pointer;
+}
+
+div.beos .Title .Titletext
+{
+   position         : absolute;
+   margin-left      : 30px;
+   width            : 90%;
+   padding-top      : 3px;
+   font-family      : microsoft sans serif,arial,helvetica,sans-serif;
+   font-size        : 10px;
+   font-weight      : bold;
+   color            : #B58600;
+   white-space      : nowrap;
+   cursor           : default;
+}
+
+div.beos .Title .Cascade
+{
+   position         : absolute;
+   background-color : #fecf00;           /* kosmetik, weil bild kein Hintergrund hat */
+   background       : url('/jsappwidgets/gfx/beos/cascadebutton.gif') no-repeat;
+   width            : 20px;
+   height           : 18px;
+   cursor           : pointer;
+}
+
+div.beos .Title .Close
+{
+   position         : absolute;
+   right            : 4px;
+   background       : url('/jsappwidgets/gfx/beos/closebutton.gif') no-repeat;
+   width            : 16px;
+   height           : 18px;
+   cursor           : pointer;
+}
+
+div.beos .Menu
+{
+   position         : static;
+   border-bottom    : 1px solid white;
+   margin-left      : 2px;
+   margin-right     : 3px;
+}
+
+div.beos .Container
+{
+   position         : relative;                                /* don't change that               */
+   background-color : white;
+}
+
+div.beos .Status
+{
+   position         : relative;
+   padding-left     : 3px;
+   bottom           : 0px;
+   padding-left     : 3px;
+   background-image : url('/jsappwidgets/gfx/beos/statusbar.gif');
+   height           : 13px;
+}
+
+div.beos .Status .StatusText
+{
+   position         : absolute;
+   font-family      : microsoft sans serif,arial,helvetica,sans-serif;
+   font-size        : 11px;
+   width            : 100%;
+   white-space      : nowrap;
+}
+
+div.beos .Status .Size
+{
+   position         : absolute;
+   background-image : url('/jsappwidgets/gfx/beos/sizebutton.gif');
+   width            : 20px;
+   height           : 20px;
+   right            : 0px;
+   cursor           : se-resize;
+}
+
+
+
+/*****************/
+/* WINDOW 'amiga' */
+/*****************/
+/* Definition of Window - Style 'amiga'*/
+div.amiga
+{
+   position         : absolute;
+   border           : 1px solid buttonface;
+   border-color     : white black black white  ;
+   background-color : #6688ae;
+   overflow         : hidden;
+   color            : black;
+}
+
+div.amiga .Title
+{
+   position         : relative;
+   border-bottom    : 1px solid black;
+   height           : 13px;
+}
+
+div.amiga .Title .Close
+{
+   position         : absolute;
+   border-right     : 1px solid black;
+   background       : url('/jsappwidgets/gfx/amiga/closebutton.gif') no-repeat;
+   width            : 17px;
+   height           : 18px;
+   cursor           : pointer;
+
+}
+
+div.amiga .Title .TitleText
+{
+   position         : absolute;
+   white-space      : nowrap;
+   font-family      : arial,helvetica,sans-serif;
+   font-size        : 10px;
+   color            : black;
+   width            : 100%;
+   margin-left      : 18px;
+   padding-left     : 3px;
+   border-left      : 1px solid white;
+   cursor           : default;
+}
+
+div.amiga .Title .Cascade
+{
+   position         : absolute;
+   border-left      : 1px solid white;
+   border-right     : 1px solid black;
+   right            : 23px;
+   background       : url('/jsappwidgets/gfx/amiga/cascadebutton.gif') no-repeat;
+   width            : 21px;
+   height           : 18px;
+   cursor           : pointer;
+}
+
+div.amiga .Title .TitlePic
+{
+   position         : absolute;
+   border-left      : 1px solid white;
+   right            : 1px;
+   background       : url('/jsappwidgets/gfx/amiga/winpic.gif') no-repeat;
+   width            : 21px;
+   height           : 18px;
+   cursor           : pointer;
+}
+
+div.amiga .Menu
+{
+   position         : static;
+   border-bottom    : 1px solid white;
+   margin-left      : 2px;
+   margin-right     : 3px;
+}
+
+div.amiga .Container
+{
+   position         : relative;
+   border-right     : 1px solid white;
+   border-left      : 1px solid black;
+   background-color : buttonface;
+   margin-left      : 2px;
+   margin-right     : 3px;
+}
+
+div.amiga .Status
+{
+   position         : relative;
+   border-top       : 1px solid white;
+   height           : 9px;
+}
+
+div.amiga .Status .StatusText
+{
+   position         : absolute;
+   font-family      : microsoft sans serif,arial,helvetica,sans-serif;
+   font-size        : 11px;
+   width            : 100%;
+   white-space      : nowrap;
+}
+
+div.amiga .Size
+{
+   position         : absolute;
+   background-image : url('/jsappwidgets/gfx/amiga/sizebutton.gif');
+   width            : 18px;
+   border-left      : 1px solid white;
+   height           : 9px;
+   right            : 0px;
+   cursor           : se-resize;
+}
+
+

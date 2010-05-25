@@ -394,15 +394,15 @@ var TabRegister = Class.create( TabElement, {
      for ( var v_iRow = 1; v_iRow <= v_iCntRows; v_iRow++ )
      {
        // create new register row
-       v_iStart = parseInt( v_fOffset * (v_iRow-1)) + 1; // start page of register
-       v_iEnd   = parseInt( v_fOffset * v_iRow);         // end page of register
+       v_iStart = ~~( v_fOffset * (v_iRow-1)) + 1; // start page of register
+       v_iEnd   = ~~( v_fOffset * v_iRow);         // end page of register
        v_bActPageInRegister = ( v_iStart <= this.m_iActPage && v_iEnd >= this.m_iActPage ); // flag (is active page in this register row?)
        v_nRegisterRow = this.createRow( v_iStart, v_iEnd, v_bActPageInRegister );
 
        if ( !v_bActPageInRegister )
        {
          // make overlapping ( go <n> pixels down )
-         v_sDistance = parseInt(this.m_hStyle.get('regDistance'));
+         v_sDistance = ~~(this.m_hStyle.get('regDistance'));
          if ( this.m_hStyle.get('regPos')  == 'bottom' ) 
            v_sDistance *= (-1);
          
@@ -488,8 +488,8 @@ var TabRegister = Class.create( TabElement, {
      v_nTD = new Element("td").addClassName( "filler" );
        
      // stretch  filler?
-     if(  (  p_bLeft && this.m_hStyle.get('regAlign') == 'right' )
-       || ( !p_bLeft && this.m_hStyle.get('regAlign') == 'left'  ) )
+     if(  (  p_bLeft && this.m_hStyle.get( 'regAlign' ) == 'right' )
+       || ( !p_bLeft && this.m_hStyle.get( 'regAlign' ) == 'left'  ) )
        v_nTD.setStyle( { width : "100%" } );
 
      // bottom or top border
@@ -659,7 +659,7 @@ var TabBox = Class.create( TabElement, {
     // second line on bottom, if not bottom registers
     if ( this.m_hStyle.get('regPos') != 'bottom' )
       v_nInnerBox.style.borderBottom = '1px solid gray';   
-
+    v_nInnerBox.style.borderRight = '1px solid gray'
     // v_nInnerBox.appendChild( this.m_nSource );
     this.m_nBox.appendChild( v_nInnerBox);
 

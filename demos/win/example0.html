@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <script type='text/javascript' src='/jsappwidgets/prototype.js'></script>
+   <script type='text/javascript' src='/jsappwidgets/win/win.js'></script>
+   <link   type='text/css'        rel='stylesheet' href='example0.css'></link>
+   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>jsAppWidgets  Simple Tab Example</title>
+</head>
+<body style='background-color:#d4d0c8' id = 'body'>
+
+
+
+<table border=1 cellpadding=20px cellspacing=3px>
+<tr>
+<td><h3>Class "WinTitle"</h3></td><td><h3>Class "WinStatus"</h3></td><td><h3>Class "Win"</h3></td>
+</tr>
+<tr>
+<td style='width:250px'>
+
+
+<div id="myWinTitle" >
+<!-- <div class="tabPage" name="Page 1" gfx="/jsappwidgets/menu/icon/ordner.gif" ><p><h1>&nbsp;&nbsp;&nbsp;3D tabs</h1></p></div>
+  --> 
+<div class="tabPage" name="&nbsp;&nbsp;A" ><p><h1>&nbsp;&nbsp;&nbsp;3D tabs</h1></p></div>
+<div class="tabPage" name="&nbsp;&nbsp;B unused" inactive ><p><b>&nbsp;&nbsp;&nbsp;with dynamic sizable tab folders</b></p></div>
+<div class="tabPage" name="&nbsp;C/D" ><p><b>&nbsp;&nbsp;&nbsp;highly designable by CSS</b></p></div>
+<div class="tabPage" name="&nbsp;&nbsp;E" >
+   <p><b>&nbsp;&nbsp;&nbsp;tested with
+                 <ul><li>Mozilla Firefox</li>
+                     <li>Opera</li>
+                     <li>MS IExplorer</li>
+                     <li>Google Chrome</li></ul> 
+   </b></p> 
+</div>
+</div>
+<!--   
+ 
+
+-->
+</td>
+
+
+<td>
+<div id="myWinStatus" >
+<!-- <div class="tabPage" name="Page 1" gfx="/jsappwidgets/menu/icon/ordner.gif" ><p><h1>&nbsp;&nbsp;&nbsp;3D tabs</h1></p></div>
+  --> 
+<div class="tabPage" name="&nbsp;&nbsp;A" ><p><h1>&nbsp;&nbsp;&nbsp;3D tabs</h1></p></div>
+<div class="tabPage" name="&nbsp;&nbsp;B unused" inactive ><p><b>&nbsp;&nbsp;&nbsp;with dynamic sizable tab folders</b></p></div>
+<div class="tabPage" name="&nbsp;C/D" ><p><b>&nbsp;&nbsp;&nbsp;highly designable by CSS</b></p></div>
+<div class="tabPage" name="&nbsp;&nbsp;E" >
+   <p><b>&nbsp;&nbsp;&nbsp;tested with
+                 <ul><li>Mozilla Firefox</li>
+                     <li>Opera</li>
+                     <li>MS IExplorer</li>
+                     <li>Google Chrome</li></ul> 
+   </b></p> 
+ </div>
+ </div>
+
+</td>
+<td>
+<div id="myWin" >
+<!-- <div class="tabPage" name="Page 1" gfx="/jsappwidgets/menu/icon/ordner.gif" ><p><h1>&nbsp;&nbsp;&nbsp;3D tabs</h1></p></div>
+  --> 
+<div class="tabPage" name="&nbsp;&nbsp;A" ><p><h1>&nbsp;&nbsp;&nbsp;3D tabs</h1></p></div>
+<div class="tabPage" name="&nbsp;&nbsp;B unused" inactive ><p><b>&nbsp;&nbsp;&nbsp;with dynamic sizable tab folders</b></p></div>
+<div class="tabPage" name="&nbsp;C/D" ><p><b>&nbsp;&nbsp;&nbsp;highly designable by CSS</b></p></div>
+<div class="tabPage" name="&nbsp;&nbsp;E" >
+   <p><b>&nbsp;&nbsp;&nbsp;tested with
+                 <ul><li>Mozilla Firefox</li>
+                     <li>Opera</li>
+                     <li>MS IExplorer</li>
+                     <li>Google Chrome</li></ul> 
+   </b></p> 
+ </div>
+ </div>
+</td>
+</tr>
+<tr>
+<td>
+<h2>style attributes</h2>
+
+<table border=1>
+<tr>
+<td><b>cssStyle</b></li></td>
+ <td>CSS class</td>
+</tr>
+<tr>
+<td><b>backgroundColor</b></td>
+<td>background color of the pages</td>
+</tr>
+<tr>
+<td><b>selectedColor</b></td> 
+<td>color of the selected page</td>
+</tr>
+<tr>
+<td><b>regAlign</b> </td>
+<td>left, right or center align</td> 
+</tr>
+<tr>
+<td><b>regPos    </b>  </td>
+<td>top or bottom register</td>
+</tr>
+<tr>
+<td><b>regRows</b>  </td>
+<td>count of register rows</td>
+</tr>
+<tr>
+<td><b>regDistance</b>   </td>
+<td>distance offset for register rows</td>   
+</tr>
+</table>
+
+</td>
+<td vAlign=top>
+
+<h2>style attributes</h2>
+
+<table border=1>
+<tr>
+<td><b>cssStyle</b></li></td>
+ <td>CSS class</td>
+</tr>
+<tr>
+<td><b>width</b> </td>
+<td>width of the box</td> 
+</tr>
+<tr>
+<td><b>height    </b>  </td>
+<td>height of the box</td>
+</tr>
+<tr>
+<td><b>backgroundColor</b></td>
+<td>background color of the pages</td>
+</tr>
+<tr>
+<td><b>selectedColor</b></td> 
+<td>color of the selected page</td>
+</tr>
+</table>
+
+</td>
+<td >
+
+<h2>style attributes</h2>
+
+<table border=1>
+<tr>
+<td><b>cssStyle</b></li></td>
+ <td>CSS class</td>
+</tr>
+<tr>
+<td><b>top</b> </td>
+<td>top position</td> 
+</tr>
+<tr>
+<td><b>left    </b>  </td>
+<td>left position</td>
+</tr>
+<tr>
+<td><b>width</b> </td>
+<td>width of the box</td> 
+</tr>
+<tr>
+<td><b>height    </b>  </td>
+<td>height of the box</td>
+</tr>
+<tr>
+<td><b>backgroundColor</b></td>
+<td>background color of the pages</td>
+</tr>
+<tr>
+<td><b>selectedColor</b></td> 
+<td>color of the selected page</td>
+</tr>
+<tr>
+<td><b>regPos</b>  </td>
+<td>top or bottom register</td>
+</tr>
+<tr>
+<td><b>regAlign</b> </td>
+<td>left, right or center align</td> 
+</tr>
+<tr>
+<td><b>regRows</b>  </td>
+<td>count of register rows</td>
+</tr>
+<tr>
+<td><b>regDistance</b>   </td>
+<td>distance offset for register rows</td>   
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+<script>
+
+  // generate tab
+  
+   
+    var myWinTitle = new WinTitle(   "myWinTitle",				  		// Source HTML (id or node)
+        { cssStyle         : 'w2k',	// Style (hash) in css : e.g. 'simple' ->> css-Style-Class is '.Tab-simple'
+		  backgroundColor  : '#a08080',  // (none) background color of the pages
+		  selectedColor    : '#d48080',  // (none) active page color
+		  regAlign         : "left",   // (left), right, center
+		  regPos           : "top",      // (top), bottom
+		  regRows          : '1',        // (1), 2, 3, ... max 100 :) use backgroundColor! for nice appearance
+ 		  regDistance      : '4px'       // (2), ...increase if to less !
+		}
+       );
+
+ 
+var myWinStatus = new WinStatus( "myWinStatus",				  		// Source HTML (id or node)
+    { cssStyle         : 'w2k',	// Style (hash) in css : e.g. 'simple' ->> css-Style-Class is '.Tab-simple'
+	  width            : "250px",    // (0px) width (inner tab container)    
+      height           : "200px",    // (0px) height (of the inner tab container, display aera). Do NOT %-value here!!
+	  backgroundColor  : '#a08080',  // (none) background color of the pages
+	  selectedColor    : '#d48080',  // (none) active page color
+	  regPos           : "top",      // (top), bottom
+    }
+    );
+
+var myWin = new Win(   "myWin",				  		// Source HTML (id or node)
+      { cssStyle         : 'w2k',	// Style (hash) in css : e.g. 'simple' ->> css-Style-Class is '.Tab-simple'
+	    left             : '10px',     // (0px) left position
+        top              : '10px',    // (0px) top position
+		width            : "250px",    // (0px) width (inner tab container)    
+		height           : "200px",    // (0px) height (of the inner tab container, display aera). Do NOT %-value here!!
+		backgroundColor  : '#a08080',  // (none) background color of the pages
+		selectedColor    : '#d48080',  // (none) active page color
+		regAlign    : "left",   // (left), right, center
+		regPos         : "top",      // (top), bottom
+		regRows     : '1',        // (1), 2, 3, ... max 100 :) use backgroundColor! for nice appearance
+		regDistance : '4px'       // (2), ...increase if to less !
+	  }
+     );
+     
+</script>
+
+</body>
+</html>
