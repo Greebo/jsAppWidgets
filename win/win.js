@@ -134,66 +134,47 @@ var WinTitle = Class.create( WinElement, {
   create : function()
   {
     // outer div
-    v_nDiv = new Element( 'div' );
-    border = "1px solid red";
-//    this.node.onmousedown = nothing;
-
-/*
-    // div Window Pic 
-    if ( this.properties&WIN_TITLEPIC)
+    v_nOuter = new Element('div');
+    
+    v_nDiv = new Element( 'div' ).addClassName('winTitle');
+    v_nOuter.appendChild( v_nDiv );
+    
+    // title pic
+    v_nPic = new Element( 'div' ).addClassName( "winTitlePic" );
+    v_nDiv.appendChild( v_nPic );
+/*    if (this.properties&WIN_CLOSE)
     {
-      this.picNode = myNode = makeDivNode(this.nr,"WinTitlePic"+this.nr, "TitlePic" );
-      this.node.appendChild(this.picNode);
-      if (this.properties&WIN_CLOSE)
-      {
-        this.picNode.ondblclick = winClose;
-      }
+       this.picNode.ondblclick = winClose;
     }
+*/    
+    
+    // clone node WITH text (parameter true)
+    v_nText = new Element('div').addClassName('winTitleText');
+    v_nDiv.appendChild( v_nText );
 
-    // div Text
-    if ( this.properties&WIN_TITLETEXT )
+    // only if moveable show move cursor
+//    if ( this.properties&WIN_MOVE )
     {
-      // clone node WITH text (parameter true)
-      this.textNode = makeDivNode(this.nr, "WinTitleText"+this.nr, "TitleText" );
-      this.node.appendChild(this.textNode);
-
-      // only if moveable show move cursor
-      if ( this.properties&WIN_MOVE )
-      {
-         this.textNode.style.cursor = "move";
-         this.textNode.onmousedown = winMoveStart;
-      }
-      // if maximizeable on dblclick maximize
-      if ( this.properties&WIN_MAXIMIZE )
-        this.textNode.ondblclick = winMaximize;
-      // if this.text == "" -> &nbsp; stay in text
-      if ( this.text != "" )
-        this.textNode.appendChild(document.createTextNode(this.text));
+       v_nText.style.cursor = "move";
+//       this.textNode.onmousedown = winMoveStart;
     }
+       // if maximizeable on dblclick maximize
+//       if ( this.properties&WIN_MAXIMIZE )
+//    v_nText.ondblclick = winMaximize;
+       // if this.text == "" -> &nbsp; stay in text
+  //     if ( this.text != "" )
+    v_nText.appendChild(document.createTextNode("my Window"));
+   
+    
+    // close
+    v_nClose = new Element( 'div' ).addClassName( "winClose" );
+    v_nClose.title = "close window";
+    v_nDiv.appendChild( v_nClose );
+    // the event handler
+//    this.closeNode.onmouseup = winClose;
 
-    // cascading-button
-    if ( this.properties&WIN_CASCADE )
-    {
-      this.cascadeNode = makeDivNode(this.nr, "WinTitleCascade"+this.nr, "Cascade" );
-      this.cascadeNode.title = "cascade window";
-      this.node.appendChild(this.cascadeNode);
-      // the event handler
-      this.cascadeNode.onmousedown = winCascade;
-    }
-
-    // close-button
-    if ( this.properties&WIN_CLOSE )
-    {
-      this.closeNode = makeDivNode(this.nr, "WinTitleClose"+this.nr, "Close" );
-      this.closeNode.title = "close window";
-      this.node.appendChild(this.closeNode);
-      // the event handler
-      this.closeNode.onmouseup = winClose;
-    }
-
-*/  
     // return the titlebar node
-    return v_nDiv;
+    return v_nOuter;
   }
 });
 
@@ -207,28 +188,23 @@ var WinStatus = Class.create( WinElement, {
   create : function()
   {
     // outer div
-    v_nDiv = new Element( 'div');
-/*
-    // Status-Text
-    if ( this.properties&WIN_STATUSTEXT )
-    {
-      myNode = makeDivNode(this.nr, "WinStatusText"+this.nr, "StatusText" );
-      if ( this.text != "" )
-        myNode.firstChild.nodeValue = this.text;
-      // append node in titlebar
-      this.node.appendChild(myNode);
-    }
+    v_nOuter = new Element( 'div' );
+    
+    v_nDiv = new Element( 'div' ).addClassName('winStatus');
+    v_nOuter.appendChild(v_nDiv);
+    
+    v_nText = new Element( 'div' ).addClassName('winStatusText'); 
 
-    // Sizebutton
-    if ( this.properties&WIN_SIZE )
-    {
-      myNode = makeDivNode(this.nr, "WinStatusSize"+this.nr, "Size" );
-      // event for start moving
-      myNode.onmousedown = winSizeStart;
-      this.node.appendChild(myNode);
-    }
-*/
-    return v_nDiv;
+    // append node in titlebar
+    v_nDiv.appendChild(v_nText);
+    
+    v_nSize = new Element('div').addClassName( 'winSize' );
+    // event for start moving
+//    v_nSize.onmousedown = winSizeStart;
+    v_nDiv.appendChild( v_nSize );
+
+
+    return v_nOuter;
   }
 });
 
