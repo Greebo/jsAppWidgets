@@ -12,8 +12,46 @@ var g_iTabNr     = 0;
 var g_aTabWidget = new Array();
 
 
-// Superclass
-var TabElement = Class.create( {
+/**
+ * Superclass of other tab classes 'Tab', 'TabRegister', 'TabBox'
+ *  
+ * @param {String|Node}  source the node or id of the source html-div
+ * @param {Hash}    style  the style attributes for the tab. Only the cssStyle entry is mandatory.
+ * Look the example for more infos and the default values (in brackets)
+ * @param {Object} [caller] Use this parameter, if widget is called from an other widget. 
+    Do not use this parameter if you do not know what you doing :). Normally this parameter is not needed.
+ * 
+ * @example var myTab = new TabElement(   "myTab",           
+          { cssStyle         : 'simple',  // css class of the div
+            left             : '10px',    // left position ("0px")
+            top              : '10px',    // top position ("0px")
+            width            : "250px",   // width ("0px" -> auto)   
+            height           : "200px",   // height ("0px" -> auto)
+            selectedColor    : '#d48080', // color of the active 
+                                          // page ('')
+            regAlign         : "left",    // register align  
+                                          // values: ("left"),"right", "center"
+            regPos           : "top",     // register position 
+                                          // values: ("top"),"bottom"
+            regRows          : '1',       // register row count ("1")
+                                          // values (1), 2, .... n 
+                                          // (max = count of pages)
+            regDistance      : '4px'      // offset ("0px") 
+                                          // try this attribute if regRows >1
+                                          // and the tab register position is wrong
+          }                             );
+                                        
+ * @class
+ */
+var TabElement = Class.create( 
+/**
+ * @lends TabElement.prototype
+ */
+{
+  /**
+   * @constructor
+   * @private
+   */
   initialize : function( p_nSource, p_hStyle, p_oCaller )
   {
     // if parent exist, the parent is the master node
@@ -64,7 +102,11 @@ var TabElement = Class.create( {
       // only create element
       this.element = this.create( );
   },
-
+  /**
+   * checks the hash style, set to default values if necessary and do other important initializing stuff.
+   * @param {Hash} style the css class
+   * @private
+   */
   initStyle :    function( p_hStyle )      
   {
     // no convert if child; parent has it already done
@@ -93,12 +135,59 @@ var TabElement = Class.create( {
       this.m_hStyle.set('regAlign','center');
   },
   
-  create   : function() { return 'none'; }, 
+  /**
+   * get the active page number (starting with 1).
+   * @example var actPage = myTab.get();
+   * @returns {Integer} the active page number
+   * @see TabElement#set
+   */
   get      : function() { return this.m_iAktPage; },
+  
+  /**
+   * get the style attributes
+   * look at @link TabElement# for the hash details 
+   * 
+   * @example var tabStyle = myTab.getStyle();
+   * @returns {Hash} the style attributes
+   * @see TabElement#setStyle
+   */
   getStyle : function() { return m_hStyle; },
+  
+  /**
+   * get the name of a page.
+   *
+   * @example var tabName = myTab.getName( 2 );
+   * @param {Integer} page the page number
+   * @returns {String} the name of a page
+   * @see TabElement#setName
+   * @see TabElement#getGfx
+   * 
+   */
   getName  : function( p_iPage ) { return this.m_aRegName[p_iPage] ;},
+  
+  /**
+   * get the path of the gfx.
+   * 
+   * @example var tabGfx = myTab.getGfx( 2 );
+   * @param {Integer} page the page number (starting with 1)
+   * @returns {String} the path of the gfx in the page
+   * @see TabElement#setGfx
+   * @see TabElement#getName
+   */
   getGfx   : function( p_iPage ) { return this.m_aRegGfx[p_iPage]; },
-  getColor : function( p_iPage ) // if no page, the background color is returned
+  
+  /**
+   * get the color of a page.
+   * 
+   * @example var tabCol = myTab.getColor( 2 );
+   * @param {Integer} [page] the page number (starting with 1). 
+   * If no page, the background color is returned
+   * @returns {String} the color of the page
+   * @see TabElement#setColor
+   * @see TabElement#getName
+   * @see TabElement#getGfx
+   */
+  getColor : function( p_iPage ) // 
   {
       // default Color:
     var v_sColor = this.m_hStyle.get('backgroundColor');
@@ -114,9 +203,34 @@ var TabElement = Class.create( {
     return v_sColor;
   },
   
+  /**
+   * checks whether the page is active.
+   * 
+   * @example var isAct = myTab.isActive( 2 );
+   * @param {Integer} page the page number (starting with 1)
+   * @returns {Boolean} the active status
+   * @see TabElement#isInactive
+   * @see TabElement#setActive
+   */
   isActive   : function( p_iPage ) { return !isInactive(p_iPage); },
+  
+  /**
+   * checks whether the page is inactive
+   * 
+   * @example var isInact = myTab.isInactive( 2 );
+   * @param {Integer} the page number (starting with 1)
+   * @returns {Boolean} the inactive status
+   * @see TabElement#isActive
+   */
   isInactive : function( p_iPage ) { return ( !this.m_aRegActive[ p_iPage ] || (this.m_iCntRegPages < p_iPage)); },
 
+  /**
+   * opens the next page. If the active page is the last, the first page will be opened.
+   *
+   * @example myTab.next();
+   * @see TabElement#prev
+   * @see TabElement#setInactive
+   */
   next       : function()
   {
     var v_bfound = false;
@@ -130,6 +244,12 @@ var TabElement = Class.create( {
     }
     this.set(  v_iActPage );
   },
+  /**
+   * opens the previous page. If the active page is the first, the last page will be opened.
+   *
+   * @example myTab.prev();
+   * @see TabElement#next
+   */
   prev       : function()
   {
     var v_bfound = false;
@@ -143,6 +263,12 @@ var TabElement = Class.create( {
     }
     this.set( v_iActPage );
   },
+  /**
+   * recreates the element and replace than the old node.
+   * Normally this method is intern (private) and should not be necessary outside. Use it carefulle!
+   * 
+   * @example myTab.redraw();
+   */
   redraw :       function()      
   { 
     v_nNewElement = this.create();
@@ -161,6 +287,13 @@ var TabElement = Class.create( {
     }
   },
 
+  /**
+   * opens a specific register page
+   *
+   * @example myTab.set( 2 );
+   * @param {Integer} page the page number (starting with 1)
+   * @see TabElement#get
+   */
   set :  function( p_iPage )
   { 
     if ( !this.isInactive( p_iPage ) )
@@ -168,34 +301,84 @@ var TabElement = Class.create( {
     else
       return false;
   },
+
+  /**
+   * sets a page to active status (allowed)
+   *
+   * @example myTab.setActive( 2 );
+   * @param {Integer} page the page number (starting with 1)
+   * @see TabElement#isActive
+   * @see TabElement#setInactive
+   */
   setActive   : function( p_iPage ){ this.m_aRegActive[ p_iPage ] = 1 ; this.redraw(); },
+
+  /**
+   * sets a page to inactive status (disallowed)
+   *
+   * @example myTab.setInactive( 2 );
+   * @param {Integer} page the page number (starting with 1)
+   * @see TabElement#isInactive
+   * @see TabElement#setActive
+   */
   setInactive : function( p_iPage ){ this.m_aRegActive[ p_iPage ] = 0 ; this.redraw(); },
+ 
+  /**
+   * sets a name of a page
+   *
+   * @example myTab.setName( 2, "new Name" );
+   * @param {Integer} page the page number (starting with 1)
+   * @param {String} name the new name (=text) of the page 
+   * @see TabElement#getName
+   */
   setName     : function( p_iPage, p_sName ) { this.m_aRegName[p_iPage] = p_sName; this.redraw(); },
+  /**
+   * sets a gfx path of a page
+   *
+   * @example myTab.setGfx( 2, "/gfx/myPic.gif" );
+   * @param {Integer} page the page number (starting with 1)
+   * @param {String} gfxPath the gfx path
+   * @see TabElement#getGfx
+   */
   setGfx      : function( p_iPage, p_sGfx  ) { this.m_aRegGfx [p_iPage] = p_sGfx; this.redraw(); },
+  /**
+   * sets the style of the widget. Only the attributes in the hash will be changed! The other attributes stay untouched.
+   *
+   * @example myTab.setStyle( { top : '10px', left : '10px' });
+   * @param {Hash} style the new style attributes
+   * @see Ta  bElement#getStyle
+   */
   setStyle    : function( p_hStyle ){ this.m_hStyle.update( p_hStyle ); this.redraw(); }
-  
 } );
 
 
 /**
- * Creates a tab object. The tab will be only initialized and not shown.
- * To draw the tab use the method {@link Tab#generateTab}
- * 
+ * Creates a tab object. The source div will be replayed by the generated tab
+ *  
+ * @class
  * @version 1.0
- * 
- * @param {string}  pstyle CSS design of the tab
- * @param {integer} left x-coordinate of the tab
- * @param {integer} top y-coordinate of the tab
- * @param {integer} width width the tab
- * @param {integer} height height of the tab
- * @param {string}  backColor background color of the tab
- * @param {object}  pages the node or id of the tab will appear
- * 
- * @constructor
- * 
- * @example myTab = new Tab("simple", 20, 150, 250, 150, "#ececec", $( "myTab" ));
+ * @param {string}  source node or id of the source (html)
+ * @param {hash}    style  the style assignments for the tab
+ * @param {integer} caller optional parameter, if widget is called from an other widget
+ * @extends TabElement
+ * @example var myTab = new Tab(   "myTab",           
+                        { cssStyle         : 'simple',  
+                          left             : '10px', 
+                          top              : '10px',
+                          width            : "250px",       
+                          height           : "200px",   
+                          selectedColor    : '#d48080', 
+                          regAlign         : "left",   
+                          regPos           : "top", 
+                          regRows          : '1',      
+                          regDistance      : '4px'     
+                        }
+                                );
  */
-var Tab = Class.create( TabElement, {
+var Tab = Class.create( TabElement, 
+/**
+ * @lends Tab#
+ */
+{
   initialize : function( $super, p_nSource, p_hStyle, p_oCaller )
   {
     $super( p_nSource, p_hStyle, p_oCaller );
@@ -203,20 +386,7 @@ var Tab = Class.create( TabElement, {
   },
 
   // no extra init (initialze from parend is enough
-  /**
-   * method to generate the tab-node
-   * 
-   * 
-   * @version 1.0
-   * 
-   * @param {integer} actPage which page (first page is 1, 2nd is 2,...) should be open at start
-   * 
-   * @returns {object} a pointer to the outer tab node
-   * 
-   * @example getElemTagName( "body", 0 ).appendChild( myTab.generateTab(1) );
-   *  
-   * @private
-   */
+
   create : function()
   {
     // new Object for Folders
@@ -257,15 +427,12 @@ var Tab = Class.create( TabElement, {
   },
   
   /**
-   * opens the Page.
-   * 
+   * opens the specified page in the tab widget.
    * @version 1.0
-   * 
-   * @param {integer} PageNr the page number (first page is 1, 2nd is 2,...) which should be opened
-   * 
-   * @example myTab.openPage( 2 ) );
-   *  
-   * @see Tab#getPage 
+   * @param {intern}  $super
+   * @param {integer} p_iPage the page number (first page is 1, 2nd is 2,...) which should be opened
+   * @example myTab.set( 2 ) );
+   * @see Tab#get
    */
   set : function( $super, p_iPage )
   {
@@ -273,18 +440,52 @@ var Tab = Class.create( TabElement, {
     this.m_oRegister.set( p_iPage );
     this.m_oBox.set(      p_iPage );
   },
+  /**
+   * reactivate a disallowed page 
+   * 
+   * @version 1.0
+   * 
+   * @param {integer} PageNr the page number (first page is 1, 2nd is 2,...) which should be opened
+   * 
+   * @example myTab.setActive( 2 ) );
+   *  
+   * @see Tab#setInactive
+   */ 
   setActive   : function( $super, p_iPage )
   {
     $super( p_iPage );
     this.m_oRegister.setActive( p_iPage );
     this.m_oBox.setActive(      p_iPage );
   },
+  /**
+   * set a page to disallowed
+   * 
+   * @version 1.0
+   * 
+   * @param {integer} p_iPage the page number (first page is 1, 2nd is 2,...) which should be opened
+   * 
+   * @example myTab.setInactive( 2 ) );
+   *  
+   * @see Tab#setActive
+   */ 
   setInactive : function( $super, p_iPage ) 
   {
     $super( p_iPage );
     this.m_oRegister.setInactive( p_iPage );
     this.m_oBox.setInactive(      p_iPage );
   },
+  /**
+   * changes the name (text) in a page
+   * 
+   * @version 1.0
+   * 
+   * @param {integer} PageNr the page number (first page is 1, 2nd is 2,...) which should be opened
+   * @param {string}  Name   the new Name
+   * 
+   * @example myTab.setName( 2, "newName" ) );
+   *  
+   * @see Tab#getName
+   */ 
   setName     : function( $super, p_iPage, p_sName ) 
   {
     $super( p_iPage, p_sName );
@@ -322,23 +523,37 @@ var Tab = Class.create( TabElement, {
 
 /**
  * Creates the tab registers 
- * 
+ * @class
+ * @name TabRegister  
  * @version 1.0
+ * @extends TabElement
+ * @param {string}  source node or id of the source (html)
+ * @param {hash}    style  the style assignments for the tab
+ * @param {integer} caller optional parameter, if widget is called from an other widget
  * 
- * @param {node,string} source Source DIV node (or id) 
- * @param {hash}        style style elements:
- * { cssStyle, left, top, backgroundColor, register, regAlign, regRows, regDistance } 
- * 
- * @constructor
- * 
- * @example myTabRegister = new TabRegister( "simple", { left : '10px', top : '10px', 'backgroundColor : 'blue' } );
+ * @example var myTabRegister = new TabRegister(   "myTab",           
+                                    { cssStyle         : 'simple',  
+                                      left             : '10px', 
+                                      top              : '10px',
+                                      width            : "250px",       
+                                      height           : "200px",   
+                                      selectedColor    : '#d48080', 
+                                      regAlign         : "left",   
+                                      regPos           : "top", 
+                                      regRows          : '1',      
+                                      regDistance      : '4px'     
+                                    }
+                                );
  */
-var TabRegister = Class.create( TabElement, {
-/*  initialize : function( $super, p_nSource, p_hStyle, p_oCaller )
+var TabRegister = Class.create( TabElement, 
+/**
+ * @lends TabRegister.prototype
+ */
+{
+  initialize : function( $super, p_nSource, p_hStyle, p_oCaller )
   {
     $super( p_nSource, p_hStyle, p_oCaller );
   },
-*/
   // subfunction from constructor
   initStyle : function( $super, p_hStyle )
   {
@@ -373,11 +588,7 @@ var TabRegister = Class.create( TabElement, {
     this.m_aNamePos = ( { x: 3, y : 2 } );
   },
   /**
-   * generates the Registers
-   * 
-   * @param {integer} actPage the page number (first page is 1, 2nd is 2,...) which should be the start page
-   * 
-   * @private
+   * @function
    */
    create : function()
    {
@@ -600,24 +811,35 @@ var TabRegister = Class.create( TabElement, {
 
 
 /**
- * Creates the Box of the tab
- * 
+ * Creates the tab box 
+ * @class
+ * @name TabBox  
  * @version 1.0
+ * @class
+ * @extends TabElement
+ * @param {string}  source node or id of the source (html)
+ * @param {hash}    style  the style assignments for the tab
+ * @param {integer} caller optional parameter, if widget is called from an other widget
  * 
- * @param {integer} nr number of the tab widget
- * @param {string}  style CSS design of the tab
- * @param {integer} x x-coordinate of the tab
- * @param {integer} y y-coordinate of the tab
- * @param {integer} width width the tab
- * @param {integer} height height of the tab
- * @param {string}  backColor background color of the tab
- * @param {object}  pages the source html code of the tab
- * 
- * @constructor
- * 
- * @private
+ * @example var myTabRegister = new TabRegister(   "myTab",           
+                                    { cssStyle         : 'simple',  
+                                      left             : '10px', 
+                                      top              : '10px',
+                                      width            : "250px",       
+                                      height           : "200px",   
+                                      selectedColor    : '#d48080', 
+                                      regAlign         : "left",   
+                                      regPos           : "top", 
+                                      regRows          : '1',      
+                                      regDistance      : '4px'     
+                                    }
+                                );
  */
-var TabBox = Class.create( TabElement, {
+var TabBox = Class.create( TabElement, 
+/**
+ * @lends TabBox.prototype
+ */
+{
   initialize : function( $super, p_nSource, p_hStyle, p_oCaller )
   {
     $super( p_nSource, p_hStyle, p_oCaller );
@@ -631,7 +853,6 @@ var TabBox = Class.create( TabElement, {
     if ( this.m_bIsMainObj )
       this.m_hStyle.set( regPos, "none" ); 
   },
-  
   create : function(   )
   {
     // box node
@@ -673,8 +894,11 @@ var TabBox = Class.create( TabElement, {
     // return the new node
     return this.m_nBox;
   },
-  
-  set : function( $super, p_iPageNr )
+  /**
+   * set the page
+   * 
+   */
+  set : function( /** @private */$super, p_iPageNr )
   {
     // set the actPage if possible
     $super( p_iPageNr ); 
