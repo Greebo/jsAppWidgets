@@ -213,8 +213,6 @@ ul.inheritsList
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
-				<br />Version
-					1.0.<br />
 				
 				<br />Extends
 					<a href="../symbols/TabElement.html">TabElement</a>.<br />
@@ -271,27 +269,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Tab.html#create">create</a></b>()
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Tab.html#initialize">initialize</a></b>($super, p_nSource, p_hStyle, p_oCaller)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/Tab.html#next">next</a></b>($super, p_hStyle)
 								</div>
-								<div class="description"></div>
+								<div class="description">opens the next page.</div>
 							</td>
 						</tr>
 					
@@ -300,7 +280,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/Tab.html#prev">prev</a></b>($super)
 								</div>
-								<div class="description"></div>
+								<div class="description">opens the previous page.</div>
 							</td>
 						</tr>
 					
@@ -316,7 +296,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Tab.html#setActive">setActive</a></b>(PageNr, p_iPage)
+								<div class="fixedFont"><b><a href="../symbols/Tab.html#setActive">setActive</a></b>($super, page)
 								</div>
 								<div class="description">reactivate a disallowed page</div>
 							</td>
@@ -325,25 +305,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Tab.html#setGfx">setGfx</a></b>($super, p_iPage, p_sGfx)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Tab.html#setInactive">setInactive</a></b>(p_iPage, p_iPage)
-								</div>
-								<div class="description">set a page to disallowed</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Tab.html#setName">setName</a></b>(PageNr, Name, p_sName)
+								<div class="fixedFont"><b><a href="../symbols/Tab.html#setGfx">setGfx</a></b>($super, page, gfxPath)
 								</div>
 								<div class="description">changes the name (text) in a page</div>
 							</td>
@@ -352,9 +314,27 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Tab.html#setStyle">setStyle</a></b>($super, p_hStyle)
+								<div class="fixedFont"><b><a href="../symbols/Tab.html#setInactive">setInactive</a></b>($super, p_iPage)
 								</div>
-								<div class="description"></div>
+								<div class="description">set a page to disallowed</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Tab.html#setName">setName</a></b>($super, page, name)
+								</div>
+								<div class="description">changes the name (text) in a page</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Tab.html#setStyle">setStyle</a></b>($super, gfxPath)
+								</div>
+								<div class="description">changes the hash style attributes (or a part of it)</div>
 							</td>
 						</tr>
 					
@@ -383,25 +363,32 @@ ul.inheritsList
 				</div>
 				
 				<div class="description">
-					Creates a tab object. The source div will be replayed by the generated tab
+					Creates a tab object. The source div will be replaced by the generated tab
 					
 				</div>
 				
 				
 				
 				<pre class="code">var myTab = new Tab(   "myTab",           
-                        { cssStyle         : 'simple',  
-                          left             : '10px', 
-                          top              : '10px',
-                          width            : "250px",       
-                          height           : "200px",   
-                          selectedColor    : '#d48080', 
-                          regAlign         : "left",   
-                          regPos           : "top", 
-                          regRows          : '1',      
-                          regDistance      : '4px'     
-                        }
-                                );</pre>
+          { cssStyle         : 'simple',  // css class of the div
+            left             : '10px',    // left position ("0px")
+            top              : '10px',    // top position ("0px")
+            width            : "250px",   // width ("0px" -> auto)   
+            height           : "200px",   // height ("0px" -> auto)
+            backgroundColor  : '#d40000', // normal color of the background 
+            selectedColor    : '#d48080', // color of the active 
+                                          // page ('')
+            regAlign         : "left",    // register align  
+                                          // values: ("left"),"right", "center"
+            regPos           : "top",     // register position 
+                                          // values: ("top"),"bottom"
+            regRows          : '1',       // register row count ("1")
+                                          // values (1), 2, .... n 
+                                          // (max = count of pages)
+            regDistance      : '4px'      // offset ("0px") 
+                                          // try this attribute if regRows >1
+                                          // and the tab register position is wrong
+          }                    );</pre>
 				
 				
 				
@@ -411,22 +398,23 @@ ul.inheritsList
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								<span class="light fixedFont">{string}</span>  <b>source</b>
+								<span class="light fixedFont">{String|Node}</span>  <b>source</b>
 								
 							</dt>
-								<dd>node or id of the source (html)</dd>
+								<dd>the node or id of the source html-div</dd>
 						
 							<dt>
-								<span class="light fixedFont">{hash}</span>  <b>style</b>
+								<span class="light fixedFont">{Hash}</span>  <b>style</b>
 								
 							</dt>
-								<dd>the style assignments for the tab</dd>
+								<dd>the style attributes for the tab. Only the cssStyle entry is mandatory.Look the example for more infos and the default values (in brackets)</dd>
 						
 							<dt>
-								<span class="light fixedFont">{integer}</span>  <b>caller</b>
-								
+								<span class="light fixedFont">{Object}</span>  <b>caller</b>
+								<i>Optional</i>
 							</dt>
-								<dd>optional parameter, if widget is called from an other widget</dd>
+								<dd>Use this parameter, if widget is called from an other widget. 
+    Do not use this parameter if you do not know what you doing :). Normally this parameter is not needed.</dd>
 						
 						</dl>
 					
@@ -449,85 +437,6 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="create"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>create</b>()
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="initialize"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>initialize</b>($super, p_nSource, p_hStyle, p_oCaller)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>$super</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>p_nSource</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>p_hStyle</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>p_oCaller</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
 					<a name="next"> </a>
 					<div class="fixedFont">
 					
@@ -536,10 +445,14 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						
+						opens the next page. If the active page is the last, the first page will be opened.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">myTab.next();</pre>
 					
 					
 					
@@ -548,10 +461,10 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>$super</b>
-									
+									<span class="light fixedFont">{Function}</span> <b>$super</b>
+									<i>Optional</i>
 								</dt>
-								<dd></dd>
+								<dd>reference to the superclass method</dd>
 							
 								<dt>
 									<b>p_hStyle</b>
@@ -566,6 +479,15 @@ ul.inheritsList
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/Tab.html#prev">Tab#prev</a></dd>
+							
+								<dd><a href="../symbols/Tab.html#setInactive">Tab#setInactive</a></dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -578,10 +500,14 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						
+						opens the previous page. If the active page is the first, the last page will be opened.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">myTab.prev();</pre>
 					
 					
 					
@@ -590,10 +516,10 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>$super</b>
-									
+									<span class="light fixedFont">{Function}</span> <b>$super</b>
+									<i>Optional</i>
 								</dt>
-								<dd></dd>
+								<dd>reference to the superclass method</dd>
 							
 							</dl>
 						
@@ -602,6 +528,15 @@ ul.inheritsList
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/Tab.html#prev">Tab#prev</a></dd>
+							
+								<dd><a href="../symbols/Tab.html#setInactive">Tab#setInactive</a></dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -630,13 +565,13 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{intern}</span> <b>$super</b>
-									
+									<span class="light fixedFont">{Function}</span> <b>$super</b>
+									<i>Optional</i>
 								</dt>
 								<dd></dd>
 							
 								<dt>
-									<span class="light fixedFont">{integer}</span> <b>p_iPage</b>
+									<span class="light fixedFont">{Integer}</span> <b>p_iPage</b>
 									
 								</dt>
 								<dd>the page number (first page is 1, 2nd is 2,...) which should be opened</dd>
@@ -663,7 +598,7 @@ ul.inheritsList
 					<div class="fixedFont">
 					
 					
-					<b>setActive</b>(PageNr, p_iPage)
+					<b>setActive</b>($super, page)
 					
 					</div>
 					<div class="description">
@@ -683,16 +618,16 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{integer}</span> <b>PageNr</b>
+									<span class="light fixedFont">{Function}</span> <b>$super</b>
+									<i>Optional</i>
+								</dt>
+								<dd>reference to the superclass method</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>page</b>
 									
 								</dt>
 								<dd>the page number (first page is 1, 2nd is 2,...) which should be opened</dd>
-							
-								<dt>
-									<b>p_iPage</b>
-									
-								</dt>
-								<dd></dd>
 							
 							</dl>
 						
@@ -716,14 +651,18 @@ ul.inheritsList
 					<div class="fixedFont">
 					
 					
-					<b>setGfx</b>($super, p_iPage, p_sGfx)
+					<b>setGfx</b>($super, page, gfxPath)
 					
 					</div>
 					<div class="description">
-						
+						changes the name (text) in a page
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">myTab.setGfx( 2, "/gfx/mypic.gif" ) );</pre>
 					
 					
 					
@@ -732,22 +671,22 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>$super</b>
-									
+									<span class="light fixedFont">{Function}</span> <b>$super</b>
+									<i>Optional</i>
 								</dt>
-								<dd></dd>
+								<dd>reference to the superclass method</dd>
 							
 								<dt>
-									<b>p_iPage</b>
+									<span class="light fixedFont">{Integer}</span> <b>page</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>the page number (first page is 1, 2nd is 2,...) which should be opened</dd>
 							
 								<dt>
-									<b>p_sGfx</b>
+									<span class="light fixedFont">{String}</span> <b>gfxPath</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>the new Name</dd>
 							
 							</dl>
 						
@@ -757,6 +696,13 @@ ul.inheritsList
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>Tab#getGfx</dd>
+							
+							</dl>
+						
 
 					<hr />
 				
@@ -764,7 +710,7 @@ ul.inheritsList
 					<div class="fixedFont">
 					
 					
-					<b>setInactive</b>(p_iPage, p_iPage)
+					<b>setInactive</b>($super, p_iPage)
 					
 					</div>
 					<div class="description">
@@ -784,16 +730,16 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{integer}</span> <b>p_iPage</b>
+									<span class="light fixedFont">{Function}</span> <b>$super</b>
+									<i>Optional</i>
+								</dt>
+								<dd>reference to the superclass method</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>p_iPage</b>
 									
 								</dt>
 								<dd>the page number (first page is 1, 2nd is 2,...) which should be opened</dd>
-							
-								<dt>
-									<b>p_iPage</b>
-									
-								</dt>
-								<dd></dd>
 							
 							</dl>
 						
@@ -817,7 +763,7 @@ ul.inheritsList
 					<div class="fixedFont">
 					
 					
-					<b>setName</b>(PageNr, Name, p_sName)
+					<b>setName</b>($super, page, name)
 					
 					</div>
 					<div class="description">
@@ -837,22 +783,22 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{integer}</span> <b>PageNr</b>
+									<span class="light fixedFont">{Function}</span> <b>$super</b>
+									<i>Optional</i>
+								</dt>
+								<dd>reference to the superclass method</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>page</b>
 									
 								</dt>
 								<dd>the page number (first page is 1, 2nd is 2,...) which should be opened</dd>
 							
 								<dt>
-									<span class="light fixedFont">{string}</span> <b>Name</b>
+									<span class="light fixedFont">{String}</span> <b>name</b>
 									
 								</dt>
 								<dd>the new Name</dd>
-							
-								<dt>
-									<b>p_sName</b>
-									
-								</dt>
-								<dd></dd>
 							
 							</dl>
 						
@@ -876,14 +822,18 @@ ul.inheritsList
 					<div class="fixedFont">
 					
 					
-					<b>setStyle</b>($super, p_hStyle)
+					<b>setStyle</b>($super, gfxPath)
 					
 					</div>
 					<div class="description">
-						
+						changes the hash style attributes (or a part of it)
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">myTab.setStyle( { top: "10px", left : "10px"} ) );</pre>
 					
 					
 					
@@ -892,16 +842,16 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>$super</b>
-									
+									<span class="light fixedFont">{Function}</span> <b>$super</b>
+									<i>Optional</i>
 								</dt>
-								<dd></dd>
+								<dd>reference to the superclass method</dd>
 							
 								<dt>
-									<b>p_hStyle</b>
+									<span class="light fixedFont">{String}</span> <b>gfxPath</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>the new Name</dd>
 							
 							</dl>
 						
@@ -910,6 +860,13 @@ ul.inheritsList
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>Tab#getStyle</dd>
+							
+							</dl>
 						
 
 					
@@ -926,7 +883,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2 on Fri May 28 2010 01:15:40 GMT+0200 (MESZ)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2 on Fri May 28 2010 14:25:21 GMT+0200 (MESZ)
 		</div>
 	</body>
 </html>

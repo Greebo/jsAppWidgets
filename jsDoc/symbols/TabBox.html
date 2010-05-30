@@ -213,8 +213,6 @@ ul.inheritsList
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
-				<br />Version
-					1.0.<br />
 				
 				<br />Extends
 					<a href="../symbols/TabElement.html">TabElement</a>.<br />
@@ -271,36 +269,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/TabBox.html#create">create</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/TabBox.html#set">set</a></b>($super, page)
 								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/TabBox.html#initialize">initialize</a></b>($super, p_nSource, p_hStyle, p_oCaller)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/TabBox.html#initStyle">initStyle</a></b>($super, p_hStyle)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/TabBox.html#set">set</a></b>($super, p_iPageNr)
-								</div>
-								<div class="description">set the page</div>
+								<div class="description">set to the active page.</div>
 							</td>
 						</tr>
 					
@@ -335,19 +306,7 @@ ul.inheritsList
 				
 				
 				
-				<pre class="code">var myTabRegister = new TabRegister(   "myTab",           
-                                    { cssStyle         : 'simple',  
-                                      left             : '10px', 
-                                      top              : '10px',
-                                      width            : "250px",       
-                                      height           : "200px",   
-                                      selectedColor    : '#d48080', 
-                                      regAlign         : "left",   
-                                      regPos           : "top", 
-                                      regRows          : '1',      
-                                      regDistance      : '4px'     
-                                    }
-                                );</pre>
+				<pre class="code">var myTabBox = new TabBox(   "myTab",                  { cssStyle         : 'simple',  // css class of the div         width            : "250px",   // width ("0px" -> auto)            height           : "200px",   // height ("0px" -> auto)         backgroundColor  : '#d40000', // normal color of the background          selectedColor    : '#d48080', // color of the active page ('')       }                           );</pre>
 				
 				
 				
@@ -357,22 +316,22 @@ ul.inheritsList
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								<span class="light fixedFont">{string}</span>  <b>source</b>
+								<span class="light fixedFont">{String|Node}</span>  <b>source</b>
 								
 							</dt>
-								<dd>node or id of the source (html)</dd>
+								<dd>the node or id of the source html-div</dd>
 						
 							<dt>
-								<span class="light fixedFont">{hash}</span>  <b>style</b>
+								<span class="light fixedFont">{Hash}</span>  <b>style</b>
 								
 							</dt>
-								<dd>the style assignments for the tab</dd>
+								<dd>the style attributes for the tab. Only the cssStyle entry is mandatory.Look the example for more infos and the default values (in brackets)</dd>
 						
 							<dt>
-								<span class="light fixedFont">{integer}</span>  <b>caller</b>
-								
+								<span class="light fixedFont">{Object}</span>  <b>caller</b>
+								<i>Optional</i>
 							</dt>
-								<dd>optional parameter, if widget is called from an other widget</dd>
+								<dd>Use this parameter, if widget is called from an other widget.  Do not use this parameter if you do not know what you doing :). Normally this parameter is not needed.</dd>
 						
 						</dl>
 					
@@ -395,139 +354,22 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="create"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>create</b>()
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="initialize"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>initialize</b>($super, p_nSource, p_hStyle, p_oCaller)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>$super</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>p_nSource</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>p_hStyle</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>p_oCaller</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="initStyle"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>initStyle</b>($super, p_hStyle)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>$super</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>p_hStyle</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
 					<a name="set"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>set</b>($super, p_iPageNr)
+					<b>set</b>($super, page)
 					
 					</div>
 					<div class="description">
-						set the page
+						set to the active page.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">var myTabBox.set( 2 );</pre>
 					
 					
 					
@@ -536,16 +378,16 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{@private}</span> <b>$super</b>
+									<span class="light fixedFont">{Function}</span> <b>$super</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>reference to the superclass method</dd>
 							
 								<dt>
-									<b>p_iPageNr</b>
+									<span class="light fixedFont">{Integer}</span> <b>page</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>the new active page</dd>
 							
 							</dl>
 						
@@ -554,6 +396,13 @@ ul.inheritsList
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/TabElement.html#get">TabElement#get</a></dd>
+							
+							</dl>
 						
 
 					
@@ -570,7 +419,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2 on Fri May 28 2010 01:15:40 GMT+0200 (MESZ)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2 on Fri May 28 2010 14:25:21 GMT+0200 (MESZ)
 		</div>
 	</body>
 </html>
